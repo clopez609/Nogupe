@@ -1,0 +1,22 @@
+﻿@model Nogupe.Web.Models.Auth.PreRegisterViewModel
+
+@{
+    ViewData["Title"] = "PreInscription";
+}
+
+<div class="container">
+
+    <form method="post" asp-controller="Account" asp-action="PreInscription" class="form-signin" style="width:100%; max-width:330px; padding:15px; margin:auto; text-align:center">
+        <h3 class="h3 mb-3 font-weight-normal">Create Pre-Register</h3>
+        <partial name="_ValidationSummary" />
+        <div class="form-group">
+            <input class="form-control" name="username" type="text" value="" asp-for="UserName" autocomplete="off" placeholder="username">
+        </div>
+
+        <div class="form-group">
+            @Html.DropDownListFor(m => m.RoleId, (SelectList)ViewBag.RoleTypes, new { @class = "form-control" })
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Guardar</button>
+    </form>
+</div>
