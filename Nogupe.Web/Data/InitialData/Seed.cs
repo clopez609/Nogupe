@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Entities.Auth;
+using Nogupe.Web.Entities.Weekday;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,6 +14,7 @@ namespace Nogupe.Web.Data
         {
             PopulateRoleTypes(modelBuilder);
             PopulateUsers(modelBuilder);
+            PopulateWeekdays(modelBuilder);
         }
 
         private static string CreateSalt()
@@ -71,6 +73,43 @@ namespace Nogupe.Web.Data
                 {
                     Id = 3,
                     Name = "alumno",
+                }
+               );
+        }
+
+        private static void PopulateWeekdays(ModelBuilder modelBuilder)
+        {
+            // Create week days
+            modelBuilder.Entity<Weekday>().HasData(
+                new Weekday
+                {
+                    Id = 1,
+                    Name = "Lunes",
+                },
+                new Weekday
+                {
+                    Id = 2,
+                    Name = "Martes",
+                },
+                new Weekday
+                {
+                    Id = 3,
+                    Name = "Miercoles",
+                },
+                new Weekday
+                {
+                    Id = 4,
+                    Name = "Jueves",
+                },
+                new Weekday
+                {
+                    Id = 5,
+                    Name = "Viernes",
+                },
+                new Weekday
+                {
+                    Id = 6,
+                    Name = "Sabado",
                 }
                );
         }

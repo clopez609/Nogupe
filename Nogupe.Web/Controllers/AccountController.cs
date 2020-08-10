@@ -5,6 +5,7 @@ using Nogupe.Web.Entities.Auth;
 using Nogupe.Web.Models.Auth;
 using Nogupe.Web.Services.RoleTypes;
 using Nogupe.Web.Services.Users;
+using System.Linq;
 
 namespace Nogupe.Web.Controllers
 {
@@ -68,7 +69,9 @@ namespace Nogupe.Web.Controllers
         [HttpGet]
         public IActionResult PreInscription()
         {
-            ViewBag.RoleTypes = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
+            //var model = new PreRegisterViewModel();
+            //ViewBag.RoleTypes = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
+            //model.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -96,6 +99,8 @@ namespace Nogupe.Web.Controllers
                 }
             }
 
+            //ViewBag.RoleTypes = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
+            //model.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
             return View("PreInscription", model);
         }
 

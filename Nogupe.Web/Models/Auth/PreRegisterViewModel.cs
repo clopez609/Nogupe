@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Nogupe.Web.Models.Auth
 {
@@ -8,6 +11,8 @@ namespace Nogupe.Web.Models.Auth
         public string UserName { get; set; }
 
         [Required]
+        //[Range(1, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
         public int RoleId { get; set; }
+
     }
 }

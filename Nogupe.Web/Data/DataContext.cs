@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Entities.Auth;
+using Nogupe.Web.Entities.Weekday;
 
 namespace Nogupe.Web.Data
 {
@@ -38,6 +39,14 @@ namespace Nogupe.Web.Data
             modelBuilder.Entity<RoleType>().Property(u => u.Name).HasMaxLength(100).IsRequired();
 
             #endregion Auth
+
+            #region Weekday
+
+            modelBuilder.Entity<Weekday>().HasKey(u => u.Id);
+            modelBuilder.Entity<Weekday>().Property(u => u.Name).HasMaxLength(50).IsRequired();
+
+            #endregion
+
 
             Seed.Run(modelBuilder);
         }
