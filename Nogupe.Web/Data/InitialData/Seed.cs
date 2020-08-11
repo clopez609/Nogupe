@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Entities.Auth;
-using Nogupe.Web.Entities.Weekday;
+using Nogupe.Web.Entities.Weekdays;
 using System;
 using System.Linq;
 using System.Security.Cryptography;

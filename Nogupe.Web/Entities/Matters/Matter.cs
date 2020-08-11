@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Nogupe.Web.Entities.Careers;
 
-namespace Nogupe.Web.Entities.Matter
+namespace Nogupe.Web.Entities.Matters
 {
     public class Matter : Entity<int>
     {

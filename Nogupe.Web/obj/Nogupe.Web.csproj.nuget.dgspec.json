@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\clopez\\Documents\\Proyectos\\Nogupe\\Nogupe.Web\\Nogupe.Web.csproj": {}
+    "D:\\Proyectos\\nogupe\\Nogupe.Web\\Nogupe.Web.csproj": {}
   },
   "projects": {
-    "D:\\clopez\\Documents\\Proyectos\\Nogupe\\Nogupe.Web\\Nogupe.Web.csproj": {
+    "D:\\Proyectos\\nogupe\\Nogupe.Web\\Nogupe.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\clopez\\Documents\\Proyectos\\Nogupe\\Nogupe.Web\\Nogupe.Web.csproj",
+        "projectUniqueName": "D:\\Proyectos\\nogupe\\Nogupe.Web\\Nogupe.Web.csproj",
         "projectName": "Nogupe.Web",
-        "projectPath": "D:\\clopez\\Documents\\Proyectos\\Nogupe\\Nogupe.Web\\Nogupe.Web.csproj",
+        "projectPath": "D:\\Proyectos\\nogupe\\Nogupe.Web\\Nogupe.Web.csproj",
         "packagesPath": "C:\\Users\\clopez\\.nuget\\packages\\",
-        "outputPath": "D:\\clopez\\Documents\\Proyectos\\Nogupe\\Nogupe.Web\\obj\\",
+        "outputPath": "D:\\Proyectos\\nogupe\\Nogupe.Web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -80,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

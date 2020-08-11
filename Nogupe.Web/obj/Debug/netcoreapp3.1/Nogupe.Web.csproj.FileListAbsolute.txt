@@ -134,3 +134,10 @@ D:\clopez\Documents\Proyectos\Nogupe\Nogupe.Web\bin\Debug\netcoreapp3.1\Microsof
 D:\clopez\Documents\Proyectos\Nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.csproj.CoreCompileInputs.cache
 D:\clopez\Documents\Proyectos\Nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.MvcApplicationPartsAssemblyInfo.cache
 D:\clopez\Documents\Proyectos\Nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.csprojAssemblyReference.cache
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.AssemblyInfoInputs.cache
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.AssemblyInfo.cs
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.csproj.CoreCompileInputs.cache
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.MvcApplicationPartsAssemblyInfo.cache
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.RazorAssemblyInfo.cache
+D:\Proyectos\nogupe\Nogupe.Web\obj\Debug\netcoreapp3.1\Nogupe.Web.RazorAssemblyInfo.cs
