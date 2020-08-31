@@ -110,8 +110,14 @@ namespace Nogupe.Web.Data
                 {
                     Id = 6,
                     Name = "Sabado",
+                },
+                new Weekday
+                {
+                    Id = 7,
+                    Name = "Domingo",
                 }
                );
         }
+
     }
 }

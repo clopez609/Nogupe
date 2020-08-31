@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200825000516_Add_Tables_Career_Matter_Course_Weekday.cs" />
+    <Compile Remove="Migrations\20200825000516_Add_Tables_Career_Matter_Course_Weekday.Designer.cs" />
+    <Compile Remove="Migrations\20200831145721_Add_All_Tables.cs" />
+    <Compile Remove="Migrations\20200831145721_Add_All_Tables.Designer.cs" />
+    <Compile Remove="Migrations\20200831151025_Add_All_Tables.cs" />
+    <Compile Remove="Migrations\20200831151025_Add_All_Tables.Designer.cs" />
+    <Compile Remove="Migrations\20200831153247_Add_All_Tables.cs" />
+    <Compile Remove="Migrations\20200831153247_Add_All_Tables.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
       <PrivateAssets>all</PrivateAssets>

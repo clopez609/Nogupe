@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Nogupe.Web.Entities.Courses;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nogupe.Web.Entities.Auth
 {
@@ -14,5 +16,7 @@ namespace Nogupe.Web.Entities.Auth
         public int RoleId { get; set; }
         public RoleType RoleType { get; set; }
 
+        public virtual ICollection<Inscription> Inscriptions { get; set; }
+        public virtual ICollection<Assistance> Assistances { get; set; }
     }
 }
