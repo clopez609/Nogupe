@@ -1,0 +1,240 @@
+﻿@model List<Nogupe.Web.Entities.Careers.Career>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div id="listModel">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="box-header card-header">
+                        <form method="post">
+                            <button id="btnModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="myModal">Nueva Carrera</button>
+                            <input id="btnSearch" type="submit" name="btnSearch"class="btn btn-primary float-right pull-right" value="Buscar" />
+                            <input id="searchTerm"type="text" name="searchTerm"  class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />
+                        </form>
+                    </div>
+                    <div class="box-body card-body">
+                        <table id="manageProduct" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Nombre
+                                    </th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td class="text-center">
+                                            <a id="btnEditModal" type="button" class="btn btn-sm btn-primary" href="@Url.Action("Edit", "Career", new { id = item.Id })" data-toggle="modal" data-target="editModal">Editar</a> |
+                                            <a id="btnDeleteModal" type="button" class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Career", new { id = item.Id })" data-toggle="modal" data-target="deleteModal">Borrar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+<!-- Modal Nueva Carrera-->
+<div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-center" id="modalLabel">Nueva Carrera</h3>
+                <button id="btnModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formModal" asp-controller="Career" asp-action="Create" method="post">
+                    <partial name="_ValidationSummary" />
+                    <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <input class="form-control" id="name" name="name" type="text" value="" placeholder="Nombre" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+
+                        </div>
+                        <div id="ExitoAlert" class="alert alert-success" style="display:none" role="alert">
+                            Datos guardados correctamente!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Carrera -->
+<div id="editModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-center" id="modalLabel">Editar Carrera</h3>
+                <button id="btnModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditModal" asp-controller="Career" asp-action="Edit" method="put">
+
+                    <input type="hidden" id="updateId" name="id" />
+
+                    <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <input class="form-control" id="updateName" name="name" type="text" value="" placeholder="Nombre" required />
+                    </div>
+
+                    <div class="form-group">
+                        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+
+                        </div>
+                        <div id="ExitoAlert" class="alert alert-success" style="display:none" role="alert">
+                            Datos guardados correctamente!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+<script type="text/javascript">
+
+        $(function () {
+
+            $('#btnModal').click(function () {
+                $("#myModal").modal('show');
+            });
+
+            $('#btnEditModal').click(function () {
+
+                var url = $('#btnEditModal').attr('href');
+
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (res) {
+                        $('#updateId').val(res.id);
+                        $('#updateName').val(res.name);
+                        $("#editModal").modal('show');
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                })
+            });
+
+            $('#btnDeleteModal').click(function () {
+
+                var url = $('#btnDeleteModal').attr('href');
+
+
+
+            });
+
+            $('#formModal').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $('#formModal').serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Create","Career")",
+                    data: formData,
+                    success: function (res) {
+                        console.log(res);
+                        if (!res.success) {
+                            $("#ErrorAlert").empty();
+                            console.log(res.errors)
+                            $.each(res.errors, function (i, item) {
+                                console.log(item[i]);
+                                $("#ErrorAlert").append($("<li>").text(item[0].errorMessage));
+                            })
+                            $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+                        } else {
+                            $("#formModal")[0].reset();
+                            $("#ExitoAlert").show("slow").delay(2000).hide("slow");
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            });
+
+            
+
+            $('#formEditModal').submit(function (e) {
+                e.preventDefault();
+
+                //var formData = $('#formEditModal').serialize();
+                var url = $('#btnEditModal').attr('href');
+                console.log()
+
+                @*$.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Create","Career")",
+                    data: formData,
+                    success: function (res) {
+                        console.log(res);
+                        if (!res.success) {
+                            $("#ErrorAlert").empty();
+                            console.log(res.errors)
+                            $.each(res.errors, function (i, item) {
+                                console.log(item[i]);
+                                $("#ErrorAlert").append($("<li>").text(item[0].errorMessage));
+                            })
+                            $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+                        } else {
+                            $("#formModal")[0].reset();
+                            $("#ExitoAlert").show("slow").delay(2000).hide("slow");
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });*@
+            });
+
+
+        });
+</script>
+}
+
+
+
+

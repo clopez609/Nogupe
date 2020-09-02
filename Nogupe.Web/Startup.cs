@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,9 +18,12 @@ namespace Nogupe.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IWebHostEnvironment Env { get; set; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -33,6 +37,8 @@ namespace Nogupe.Web
             );
 
             IoC.AddDependency(services);
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -51,12 +57,18 @@ namespace Nogupe.Web
                 opt.Cookie.IsEssential = true;
             });
 
-            services.AddControllersWithViews();
+            var mvcBuilder = services.AddControllersWithViews();
+
+            if (Env.IsDevelopment())
+            {
+                mvcBuilder.AddRazorRuntimeCompilation();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

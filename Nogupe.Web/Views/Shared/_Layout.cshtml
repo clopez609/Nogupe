@@ -23,7 +23,10 @@
                             if (Context.Session.GetString("_User") != null)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="PreInscription">Pre-Inscripción</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Career" asp-action="Index">Carreras</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="PreInscription">Usuarios</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link">¡Hola! @Context.Session.GetString("_User")</a>
@@ -55,8 +58,10 @@
             &copy; 2020 - Nogupe.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
