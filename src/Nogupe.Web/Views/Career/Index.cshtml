@@ -1,0 +1,207 @@
+﻿@model List<Nogupe.Web.Entities.Careers.Career>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="box-header card-header">
+                    <form method="post">
+                        <button id="btnCreate" type="button" class="btn btn-success pull-right" onclick="CreateCareer()" data-toggle="modal" data-target="myModal">Nueva Carrera</button>
+                        <input id="btnSearch" type="submit" name="btnSearch" class="btn btn-primary float-right pull-right" value="Buscar" />
+                        <input id="searchTerm" type="text" name="searchTerm" class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />
+                    </form>
+                </div>
+                <div class="box-body card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Nombre
+                                </th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td class="text-center">
+                                        <button id="btnEditModal" class="btn btn-sm btn-primary pull-right" onclick="EditCareer(@item.Id)" data-toggle="modal" data-target="editModal">Editar</button> |
+                                        <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="DeleteCareer(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" aria-live="polite" aria-atomic="true">
+    <div class="toast-body alert-success">
+        Registro guardado.
+    </div>
+</div>
+
+
+<!-- Modal Create -->
+<div class="modal fade" id="createModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="createModalBody">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="editModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="editModalBody">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete -->
+<div class="modal fade" id="deleteModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content" id="deleteModalBody">
+            <partial name="_delete" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    function CreateCareer() {
+        $.get("/Career/Create", function (res) {
+            $('#createModalBody').html(res);
+            $('#createModal').modal('show');
+        })
+    };
+
+    function EditCareer(id) {
+        $.get("/Career/Edit", { id: id }, function (res) {
+            $('#editModalBody').html(res);
+            $('#editModal').modal('show');
+        })
+    };
+
+    function DeleteCareer(id) {
+        $('#deleteModal').modal('show');
+        $('#deleteModal #id').val(id);
+    }
+
+    function CreateFormCareer() {
+
+            var modal = $('#createModal');
+            var form = $('form[name="createForm"]');
+
+            form.validate({
+                rules: {
+                    name: {
+                        required: true
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "Requerido.",
+                    }
+                },
+                errorElement: 'div',
+                wrapper: "div",
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element)
+                    error.addClass('error-message');  // add a class to the wrapper
+                    error.css('color', 'red');
+                }
+            });
+            if (!form.valid()) {
+                return
+            } else {
+                var data = form.serialize();
+                var url = "@Url.Action("Create","Career")";
+                $.post(url, data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+                        $('.toast').toast('show');
+                    }
+                });
+            };
+    };
+
+    function EditFormCareer() {
+        var modal = $('#editModal');
+        var form = $('form[name="editForm"]');
+
+        form.validate({
+            rules: {
+                name: {
+                    required: true
+                }
+            },
+            messages: {
+                name: {
+                    required: "Requerido.",
+                }
+            },
+            errorElement: 'div',
+            wrapper: "div",
+            errorPlacement: function (error, element) {
+                error.insertAfter(element)
+                error.addClass('error-message');  // add a class to the wrapper
+                error.css('color', 'red');
+            }
+        });
+        if (!form.valid()) {
+            return
+        } else {
+            var data = form.serialize();
+            var url = "@Url.Action("Edit","Career")";
+            $.post(url, data, function (res) {
+                if (res) {
+                    modal.modal('hide');
+                    $('.toast').toast('show');
+                }
+            });
+        };
+    }
+
+    function DeleteFormCareer() {
+        var modal = $('#deleteModal');
+        var dataId = modal.find('input[name="id"]').val();
+
+        var url = "@Url.Action("Delete","Career")";
+        $.post(url, { id: dataId }, function (res) {
+            if (res) {
+                modal.modal('hide');
+                //$('.toast').toast('show');
+            }
+        });
+    }
+
+</script>
+}
+
+
+
+
+
+
