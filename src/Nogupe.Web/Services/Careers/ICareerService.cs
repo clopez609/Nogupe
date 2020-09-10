@@ -7,6 +7,10 @@ namespace Nogupe.Web.Services.Careers
 {
     public interface ICareerService : IRepository<Career>
     {
-        //PagedListResult<CareerListDTO> GetPaged(int page, int pageSize, string search);
+        PagedListResult<Career> GetPaged(
+            int page, 
+            int pageSize,
+            string search = null
+        );
     }
 }

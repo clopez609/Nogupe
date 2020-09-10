@@ -31,7 +31,6 @@ namespace Nogupe.Web.Entities.Repository
         public void Delete(T entity)
         {
             if (entity == null) throw new ArgumentNullException();
-
             _context.Remove(entity);
             _context.SaveChanges();
         }

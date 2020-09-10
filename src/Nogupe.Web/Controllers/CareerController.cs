@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Careers;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Models.Career;
@@ -20,8 +21,10 @@ namespace Nogupe.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var careerList = _careerService.GetAll().ToList();
-            return View(careerList);
+            var pagination = new PaginationOptions();
+            var query = _careerService.GetPaged(pagination.Page, pagination.PageSize, null);
+            
+            return View(query);
         }
 
         public ActionResult Create()

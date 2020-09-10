@@ -1,6 +1,10 @@
-﻿using Nogupe.Web.Data;
+﻿using Nogupe.Web.Common;
+using Nogupe.Web.Data;
 using Nogupe.Web.Entities.Careers;
 using Nogupe.Web.Entities.Repository;
+using Nogupe.Web.Helpers.QueryableExtentions;
+using Nogupe.Web.Models.DTOs.Career;
+using System.Linq;
 
 namespace Nogupe.Web.Services.Careers
 {
@@ -10,6 +14,16 @@ namespace Nogupe.Web.Services.Careers
         public CareerService(DataContext context) : base(context)
         {
             _context = context;
+        }
+
+        public PagedListResult<Career> GetPaged(int pageNumber, int pageSize, string search = null)
+        {
+            IQueryable<Career> query = _context.Set<Career>();
+            if (search != null)
+            {
+                return null;
+            }
+            return query.GetPaged(pageNumber, pageSize);
         }
     }
 }

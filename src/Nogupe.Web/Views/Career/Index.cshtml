@@ -1,4 +1,5 @@
-﻿@model List<Nogupe.Web.Entities.Careers.Career>
+﻿@using Nogupe.Web.Entities.Careers
+@model Nogupe.Web.Common.PagedListResult<Career>
 
 @{
     ViewData["Title"] = "Index";
@@ -26,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Entities)
                             {
                                 <tr>
                                     <td>

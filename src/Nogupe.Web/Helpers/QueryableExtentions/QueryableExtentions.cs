@@ -34,15 +34,15 @@ namespace Nogupe.Web.Helpers.QueryableExtentions
         //    return sortParameterList.Sort(query) as IQueryable<T>;
         //}
 
-        public static IQueryable<T> If<T>(this IQueryable<T> query, bool should,
-            params Func<IQueryable<T>, IQueryable<T>>[] transforms)
-        {
-            return should ? transforms.Aggregate(query, (current, transform) => transform.Invoke(current)) : query;
-        }
+        //public static IQueryable<T> If<T>(this IQueryable<T> query, bool should,
+        //    params Func<IQueryable<T>, IQueryable<T>>[] transforms)
+        //{
+        //    return should ? transforms.Aggregate(query, (current, transform) => transform.Invoke(current)) : query;
+        //}
 
-        public static bool Empty<T>(this IEnumerable<T> enumerable)
-        {
-            return enumerable == null || !enumerable.Any();
-        }
+        //public static bool Empty<T>(this IEnumerable<T> enumerable)
+        //{
+        //    return enumerable == null || !enumerable.Any();
+        //}
     }
 }
