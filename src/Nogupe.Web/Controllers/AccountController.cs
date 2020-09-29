@@ -55,7 +55,6 @@ namespace Nogupe.Web.Controllers
                     return View("Login", model);
                 }
             }
-
             return View("Login", model);
         }
 

@@ -1,21 +1,40 @@
-﻿@model Nogupe.Web.ViewModels.Auth.LoginViewModel
+﻿@model LoginViewModel
 
 @{
     ViewData["Title"] = "Login";
 }
-<div class="container">
 
-    <form method="post" asp-controller="Account" asp-action="Login" class="form-signin" style="width:100%; max-width:330px; padding:15px; margin:auto; text-align:center">
-        <h3 class="h3 mb-3 font-weight-normal">Please sign in</h3>
-        <partial name="_ValidationSummary" />
-        <div class="form-group">
-            <input class="form-control" name="username" type="text" value="" asp-for="Username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <input class="form-control" name="password" type="password" value="" asp-for="Password" placeholder="Password">
-        </div>
+<form method="post" asp-controller="Account" asp-action="Login" class="form-signin" style="width:100%; max-width:330px; padding:15px; margin:auto;">
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-        <a class="btn-link mt-2" asp-controller="Account" asp-action="Register">Registrarse</a>
-    </form>
-</div>
+    <h3 class="h3 mb-3 font-weight-normal text-center">Bienvenido</h3>
+
+    <partial name="_ValidationSummary" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username)
+        @Html.TextBoxFor(model => model.Username, new { @class = "form-control", tabindex = "1" })
+        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Password)
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control", tabindex = "2" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    <a class="btn-link mt-2" asp-controller="Account" asp-action="Register">Registrarse</a>
+</form>
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+        });
+
+    </script>
+}

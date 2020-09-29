@@ -35,7 +35,6 @@ namespace Nogupe.Web.Controllers
             }
 
             var resultList = _careerService.GetPagedList(pagination.Page, pagination.PageSize, null).ToViewModel();
-
             return View(resultList);
         }
 

@@ -4,10 +4,12 @@ namespace Nogupe.Web.ViewModels.Auth
 {
     public class LoginViewModel
     {
-        [Required]
+        [Display(Name ="Usuario")]
+        [Required(ErrorMessage = "Requerido")]
         public string Username { get; set; }
 
-        [Required]
+        [Display(Name = "Contraseña")]
+        [Required(ErrorMessage = "Requerido")]
         public string Password { get; set; }
     }
 }
