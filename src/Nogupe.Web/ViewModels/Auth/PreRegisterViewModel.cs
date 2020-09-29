@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nogupe.Web.Models.Auth
+namespace Nogupe.Web.ViewModels.Auth
 {
     public class PreRegisterViewModel
     {

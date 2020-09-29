@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nogupe.Web.Entities.Auth;
-using Nogupe.Web.Models.Auth;
 using Nogupe.Web.Services.RoleTypes;
 using Nogupe.Web.Services.Users;
+using Nogupe.Web.ViewModels.Auth;
 using System.Linq;
 
 namespace Nogupe.Web.Controllers

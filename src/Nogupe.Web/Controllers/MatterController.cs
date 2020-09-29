@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Nogupe.Web.Common;
-using Nogupe.Web.Entities.Careers;
+using Nogupe.Web.Entities.Matters;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Careers;
-using Nogupe.Web.ViewModels.Career;
+using Nogupe.Web.Services.Matters;
+using Nogupe.Web.ViewModels.Matter;
 using System;
 using System.Linq;
 
 namespace Nogupe.Web.Controllers
 {
-    public class CareerController : Controller
+    public class MatterController : Controller
     {
+        private readonly IMatterService _matterService;
         private readonly ICareerService _careerService;
-
-        public CareerController(ICareerService careerService)
+        public MatterController(IMatterService matterService, ICareerService careerService)
         {
+            _matterService = matterService;
             _careerService = careerService;
         }
 
@@ -34,28 +37,29 @@ namespace Nogupe.Web.Controllers
                 pagination.PageSize = 10;
             }
 
-            var resultList = _careerService.GetPagedList(pagination.Page, pagination.PageSize, null).ToViewModel();
-
+            var resultList = _matterService.GetPagedList(pagination.Page, pagination.PageSize, null).ToViewModel();
             return View(resultList);
         }
 
         public ActionResult Create()
         {
-            var careerViewModel = new CareerViewModel();
-            return PartialView("_Create", careerViewModel);
+            var matterViewModel = new MatterViewModel();
+            matterViewModel.Careers = new SelectList(_careerService.GetAll().ToViewModel(), "Id", "Name");
+
+            return PartialView("_Create", matterViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CareerViewModel model)
+        public ActionResult Create(MatterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var career = new Career();
+                var matter = new Matter();
 
-                model.ToEntityModel(career);
+                model.ToEntityModel(matter);
 
-                _careerService.Create(career);
+                _matterService.Create(matter);
 
                 return Json(new { success = true });
             }
@@ -70,26 +74,28 @@ namespace Nogupe.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var careerViewModel = _careerService.GetById(id).ToViewModel();
-            return PartialView("_edit", careerViewModel);
+            var matterViewmodel = _matterService.GetById(id).ToViewModel();
+            matterViewmodel.Careers = new SelectList(_careerService.GetAll().ToViewModel(), "Id", "Name");
+
+            return PartialView("_Edit", matterViewmodel);
         }
 
-        // POST: CareerController/Edit/5
+        // POST: MatterController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, CareerViewModel model)
+        public ActionResult Edit(int id, MatterViewModel model)
         {
-            var career = _careerService.GetById(id);
+            var matter = _matterService.GetById(id);
 
-            if (career == null)
+            if (matter == null)
             {
                 return BadRequest();
             }
 
             if (ModelState.IsValid)
             {
-                model.ToEntityModel(career);
-                _careerService.Update(career);
+                model.ToEntityModel(matter);
+                _matterService.Update(matter);
                 return Json(new { success = true });
             }
 
@@ -101,19 +107,19 @@ namespace Nogupe.Web.Controllers
             });
         }
 
-        // POST: CareerController/Delete/5
+        // POST: MatterController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var career = _careerService.GetById(id);
+            var matter = _matterService.GetById(id);
 
-            if (career == null)
+            if (matter == null) 
             {
                 return BadRequest();
             }
 
-            _careerService.Delete(career);
+            _matterService.Delete(matter);
             return Json(new { success = true });
         }
     }

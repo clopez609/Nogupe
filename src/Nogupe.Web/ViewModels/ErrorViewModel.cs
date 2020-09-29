@@ -1,6 +1,4 @@
-using System;
-
-namespace Nogupe.Web.Models
+namespace Nogupe.Web.ViewModels
 {
     public class ErrorViewModel
     {

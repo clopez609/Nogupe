@@ -1,9 +1,26 @@
-﻿@using Nogupe.Web.Entities.Careers
-@model Nogupe.Web.Common.PagedListResult<Career>
+﻿@model PagedListResultViewModel<CareerViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
+
+@{
+    var urlTemplate = Url.Action() + "?page={0}&pageSize=10";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "page" || key == "pageSize")
+        {
+            continue;
+        }
+
+        urlTemplate += "&" + key + "=" + request.Query[key];
+    }
+
+    var startIndex = Math.Max(Model.CurrentPage - 5, 1);
+    var finishIndex = Math.Min(Model.CurrentPage + 5, Model.PageCount);
+}
+
 
 <div class="container">
     <div class="row">
@@ -27,7 +44,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Entities)
+                            @foreach (var item in Model.Results)
                             {
                                 <tr>
                                     <td>
@@ -41,6 +58,39 @@
                             }
                         </tbody>
                     </table>
+                </div>
+                <div class="box-shadow card-footer">
+                    <nav aria-label="Page Navigation">
+                        @if (Model.PageCount > 1)
+                        {
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="@urlTemplate.Replace("{0}", "1")" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                @for (var i = startIndex; i <= finishIndex; i++)
+                                {
+                                    @if (i == Model.CurrentPage)
+                                    {
+
+                                        <li class="page-item"><a class="page-link">@i</a></li>
+                                    }
+                                    else
+                                    {
+
+                                        <li class="page-item"><a class="page-link" href="@urlTemplate.Replace("{0}", i.ToString())">@i</a></li>
+                                    }
+                                }
+                                <li class="page-item">
+                                    <a class="page-link" href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>}
+                    </nav>
                 </div>
             </div>
         </div>
@@ -76,7 +126,7 @@
 <div class="modal fade" id="deleteModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content" id="deleteModalBody">
-            <partial name="_delete" />
+            <partial name="_Delete" />
         </div>
     </div>
 </div>
@@ -85,7 +135,7 @@
 
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     $(document).ready(function () {
 
@@ -188,17 +238,17 @@
     function DeleteFormCareer() {
         var modal = $('#deleteModal');
         var dataId = modal.find('input[name="id"]').val();
+        var url = "@Url.Action("Delete","Career")"+ dataId;
 
-        var url = "@Url.Action("Delete","Career")";
-        $.post(url, { id: dataId }, function (res) {
+        $.post(url, function (res) {
             if (res) {
                 modal.modal('hide');
-                //$('.toast').toast('show');
+                $('.toast').toast('show');
             }
         });
     }
 
-</script>
+    </script>
 }
 
 

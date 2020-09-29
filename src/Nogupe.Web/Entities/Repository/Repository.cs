@@ -45,5 +45,9 @@ namespace Nogupe.Web.Entities.Repository
             return _context.Set<T>().Find(id);
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }

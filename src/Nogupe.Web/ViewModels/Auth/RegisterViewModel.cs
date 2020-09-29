@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Nogupe.Web.Models.Auth
+namespace Nogupe.Web.ViewModels.Auth
 {
     public class RegisterViewModel
     {

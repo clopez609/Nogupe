@@ -1,0 +1,31 @@
+﻿@model MatterViewModel
+
+<form name="createForm" id="createForm" asp-controller="Matter" asp-action="Create">
+    <div class="modal-header">
+        <h3 class="modal-title text-center" id="modalLabel">Nueva Materia</h3>
+        <button id="btnModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <partial name="_ValidationSummary" />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", tabindex = "1" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CareerId, "Carrera")
+            @Html.DropDownListFor(model => model.CareerId, Model.Careers, "Seleccioné una carrera...", new { @class = "form-control", tabindex = "2" })
+            @Html.ValidationMessageFor(model => model.CareerId, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" onclick="CreateFormMatter()" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+    </div>
+</form>
