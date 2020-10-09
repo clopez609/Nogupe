@@ -1,0 +1,108 @@
+﻿@model CourseViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@using (@Html.BeginForm("Create", "Course", FormMethod.Post, new { @class = "form", @style = "width: 35em; margin: auto;" }))
+{
+    <partial name="_ValidationSummary" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CommissionNumber, "N° de Comisión")
+        @Html.TextBoxFor(model => model.CommissionNumber, new { @type = "number", @class = "form-control", tabindex = "1" })
+        @Html.ValidationMessageFor(model => model.CommissionNumber, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CareerId, "Carreras")
+        @Html.DropDownListFor(model => model.CareerId, Model.Careers, "Seleccioné...", new { Id = "ComboCarreras", @class = "form-control", tabindex = "2" })
+        @Html.ValidationMessageFor(model => model.CareerId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MatterId, "Materia")
+        @Html.DropDownListFor(model => model.MatterId, Model.Matters, "Seleccioné una carrera primero...", new { Id = "ComboMaterias", @class = "form-control", tabindex = "3", disabled = "disabled" })
+        @Html.ValidationMessageFor(model => model.MatterId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.WeekdayId, "Dia")
+        @Html.DropDownListFor(model => model.WeekdayId, Model.Weekdays, "Seleccioné...", new { @class = "form-control", tabindex = "4" })
+        @Html.ValidationMessageFor(model => model.WeekdayId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.StartDate, "Fecha de Inicio")
+        @Html.TextBoxFor(model => model.StartDate, String.Format("{0:dd/MM/yyyy}", Model.StartDate), new { @type = "date", @class = "form-control", tabindex = "5" })
+        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EndDate, "Fecha de Inicio")
+        @Html.TextBoxFor(model => model.EndDate, String.Format("{0:dd/MM/yyyy}", Model.EndDate), new { @type = "date", @class = "form-control", tabindex = "6" })
+        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UserId, "Profesor")
+        @Html.DropDownListFor(model => model.UserId, Model.Users, "Seleccioné...", new { @class = "form-control", tabindex = "7" })
+        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="row m-1">
+        <input type="submit" value="Guardar" class="btn btn-primary btn-block" />
+        <a asp-action="index" class="btn btn-secondary btn-block mt-1">Volver</a>
+    </div>
+    
+}
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('#ComboCarreras').change(function () {
+                var value = $('#ComboCarreras').val();
+                if (value != "") {
+                    var url = "@Url.Action("List", "Matter")";
+                    var data = {
+                        Search: JSON.stringify({ "CareerId": value }),
+                        CurrentPage: 1,
+                        PageSize: 100,
+                    };
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: data,
+                        success: function (respuesta) {
+                            $('#ComboMaterias').empty(); // remove any existing options
+                            if (respuesta.length > 0) {
+                                $.each(respuesta, function (index, item) {
+                                    var opt = new Option(item.text, item.value);
+                                    $('#ComboMaterias').append(opt);
+                                    $("#ComboMaterias").prop('disabled', false);
+                                });
+                            } else {
+                                var opt = new Option("No hay materias cargadas...", "");
+                                $('#ComboMaterias').append(opt);
+                                $("#ComboMaterias").prop('disabled', true)
+                            }
+                        },
+                        error: function () {
+                            console.log("No se ha podido obtener la información");
+                        }
+                    })
+                }
+                else {
+                    $('#ComboMaterias').empty();
+                    var opt = new Option("Seleccioné una carrera primero...", "");
+                    $('#ComboMaterias').append(opt);
+                    $("#ComboMaterias").prop('disabled', true)
+                }
+            });
+        });
+
+    </script>
+}

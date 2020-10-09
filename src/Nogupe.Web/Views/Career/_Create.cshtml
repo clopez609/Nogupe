@@ -1,4 +1,4 @@
-﻿@model Nogupe.Web.ViewModels.Career.CareerViewModel
+﻿@model CareerViewModel
 
 <form name="createForm" id="createForm" asp-controller="Career" asp-action="Create">
     <div class="modal-header">
@@ -12,13 +12,14 @@
         <partial name="_ValidationSummary" />
 
         <div class="form-group">
-            <label for="name">Nombre</label>
-            <input class="form-control" name="name" type="text" value="" placeholder="Nombre" required />
+            @Html.LabelFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", tabindex = "1" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="button" onclick="CreateFormCareer()" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
 </form>

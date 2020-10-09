@@ -39,7 +39,7 @@ namespace Nogupe.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = _userService.ValidateUser(model.Username, model.Password);
+                var result = _userService.ValidateUser(model.UserName, model.Password);
                 if (result.Result)
                 {
                     var user = result.User;
@@ -68,10 +68,10 @@ namespace Nogupe.Web.Controllers
         [HttpGet]
         public IActionResult PreInscription()
         {
-            //var model = new PreRegisterViewModel();
-            //ViewBag.RoleTypes = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
-            //model.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
-            return View();
+            var viewModel = new PreRegisterViewModel();
+            viewModel.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
+            
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -88,19 +88,18 @@ namespace Nogupe.Web.Controllers
                         RoleId = model.RoleId
                     };
                     _userService.Create(user);
+
                     return Redirect("/Home/Index");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorCode);
-                    ViewBag.RoleTypes = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
-                    return View("PreInscription", model);
+                    model.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
+                    return View(nameof(PreInscription), model);
                 }
             }
-
-            //ViewBag.RoleTypes = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
-            //model.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
-            return View("PreInscription", model);
+            model.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
+            return View(nameof(PreInscription), model);
         }
 
 

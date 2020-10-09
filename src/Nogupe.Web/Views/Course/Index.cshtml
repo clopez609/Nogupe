@@ -1,0 +1,111 @@
+﻿@model PagedListResultViewModel<CourseViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="box-header card-header">
+                <form asp-action="index" method="get">
+                    <a class="btn btn-success pull-right" asp-area="" asp-controller="Course" asp-action="Create">Nuevo Curso</a>
+                    <input id="btnSearch" type="submit" name="search" class="btn btn-primary float-right pull-right" value="Buscar" />
+                    @Html.TextBoxFor(model => model.Search, new { @class = "form-control float-right pull-right", @style = "width:180px;margin-right:10px;" })
+                </form>
+            </div>
+            <div class="box-body card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                N° Comisión
+                            </th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Results)
+                        {
+                            <tr id="row_@item.Id">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CommissionNumber)
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-shadow card-footer">
+                <nav aria-label="Page Navigation">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.PageCount; i++)
+                        {
+                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete -->
+<div class="modal fade" id="deleteModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmar Borrado</h4>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <h5>¿Esta seguro que desea borrar el registro?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="DeleteCourse()">Borrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*hidden field for storing current courseId*@
+<input type="hidden" id="hiddenId" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $(document).ready(function () {
+
+      
+    });
+
+    function ConfirmDelete(id) {
+        $('#hiddenId').val(id);
+        $('#deleteModal').modal('show');
+    }
+
+    function DeleteCourse() {
+        var id = $('#hiddenId').val();
+        console.log(id);
+        var url = "@Url.Action("Delete")";
+        $.ajax({
+            type: "Delete",
+            url: url,
+            data: { id: id },
+            success: function (res) {
+                $('#deleteModal').modal('hide');
+                $("#row_" + id).remove();
+            }
+        })
+    }
+
+</script>
+}

@@ -4,11 +4,10 @@ namespace Nogupe.Web.ViewModels.Auth
 {
     public class LoginViewModel
     {
-        [Display(Name ="Usuario")]
         [Required(ErrorMessage = "Requerido")]
-        public string Username { get; set; }
+        [RegularExpression("^[0-9]{0,8}$", ErrorMessage = "Documento invalido")]
+        public string UserName { get; set; }
 
-        [Display(Name = "Contraseña")]
         [Required(ErrorMessage = "Requerido")]
         public string Password { get; set; }
     }

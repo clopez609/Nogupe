@@ -1,42 +1,40 @@
-﻿@model Nogupe.Web.ViewModels.Auth.PreRegisterViewModel
+﻿@model PreRegisterViewModel
 
 @{
     ViewData["Title"] = "PreInscription";
 }
 
-
-<form method="post" asp-controller="Account" asp-action="PreInscription" class="form-signin" style="width:100%; max-width:330px; padding:15px; margin:auto;">
+<form asp-controller="Account" asp-action="PreInscription" class="form-signin" style="width:100%; max-width:330px; padding:15px; margin:auto;">
 
     <h3 class="h3 mb-3 font-weight-normal text-center">Nuevo Usuario</h3>
 
     <partial name="_ValidationSummary" />
 
     <div class="form-group">
-        <input class="form-control" name="username" type="text" value="" asp-for="UserName" autocomplete="off" placeholder="username">
+        @Html.LabelFor(model => model.UserName, "Usuario")
+        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", tabindex = "1" })
+        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" id="radio1" asp-for="RoleId" value="1" type="radio" checked />
-            <label class="form-check-label" for="radio1">
-                Admin
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" id="radio2" asp-for="RoleId" value="2" type="radio" checked />
-            <label class="form-check-label" for="radio2">
-                Profesor
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" id="radio3" asp-for="RoleId" value="3" type="radio" checked />
-            <label class="form-check-label" for="radio3">
-                Alumno
-            </label>
-        </div>
+        @Html.LabelFor(model => model.RoleId, "Tipo de Usuario")
+        @Html.DropDownListFor(model => model.RoleId, Model.Roles, "Seleccioné...", new { @class = "form-control", tabindex = "2" })
+        @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
     </div>
 
     <button class="btn btn-block btn-primary" type="submit">Guardar</button>
     <a class="btn btn-block btn-secondary" asp-controller="Home" asp-action="Index">Cancelar</a>
-
 </form>
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            
+        });
+
+    </script>
+}

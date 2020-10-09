@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Nogupe.Web.Entities.Courses
+﻿namespace Nogupe.Web.Entities.Courses
 {
     public class Comment : Entity<int>
     {

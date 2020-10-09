@@ -92,7 +92,7 @@ namespace Nogupe.Web.Data
             #region Career
 
             modelBuilder.Entity<Career>().HasKey(u => u.Id);
-            modelBuilder.Entity<Career>().Property(u => u.Name).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Career>().Property(u => u.Name).HasMaxLength(100).IsRequired();
             modelBuilder.Entity<Career>()
                 .HasMany(c => c.Matters)
                 .WithOne(e => e.Career);
@@ -102,7 +102,7 @@ namespace Nogupe.Web.Data
             #region Matter
 
             modelBuilder.Entity<Matter>().HasKey(u => u.Id);
-            modelBuilder.Entity<Matter>().Property(u => u.Name).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Matter>().Property(u => u.Name).HasMaxLength(100).IsRequired();
             
             modelBuilder.Entity<Matter>()
                 .HasOne(e => e.Career)
@@ -141,10 +141,10 @@ namespace Nogupe.Web.Data
 
             modelBuilder.Entity<Wall>().HasKey(u => u.Id);
 
-            modelBuilder.Entity<Wall>()
-                .HasOne(e => e.Course)
-                .WithOne(c => c.Wall)
-                .HasForeignKey<Course>(e => e.WallId);
+            //modelBuilder.Entity<Wall>()
+            //    .HasOne(e => e.Course)
+            //    .WithOne(c => c.Wall)
+            //    .HasForeignKey<Course>(e => e.WallId);
 
             modelBuilder.Entity<Wall>()
                 .HasMany(e => e.Comments)

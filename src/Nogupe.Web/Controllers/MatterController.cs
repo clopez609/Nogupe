@@ -6,6 +6,7 @@ using Nogupe.Web.Entities.Matters;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Careers;
 using Nogupe.Web.Services.Matters;
+using Nogupe.Web.ViewModels;
 using Nogupe.Web.ViewModels.Matter;
 using System;
 using System.Linq;
@@ -23,13 +24,13 @@ namespace Nogupe.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(PagedListResultViewModel<MatterViewModel> PagedList)
         {
             var pagination = new PaginationOptions();
-            if (!String.IsNullOrEmpty(HttpContext.Request.Query["page"]) && !String.IsNullOrEmpty(HttpContext.Request.Query["pageSize"]))
+            if (PagedList.CurrentPage > 0)
             {
-                pagination.Page = int.Parse(HttpContext.Request.Query["page"]);
-                pagination.PageSize = int.Parse(HttpContext.Request.Query["pageSize"]);
+                pagination.Page = PagedList.CurrentPage;
+                pagination.PageSize = 10;
             }
             else
             {
@@ -39,6 +40,31 @@ namespace Nogupe.Web.Controllers
 
             var resultList = _matterService.GetPagedList(pagination.Page, pagination.PageSize, null).ToViewModel();
             return View(resultList);
+        }
+
+        [HttpGet]
+        public ActionResult List(PagedListResultViewModel<MatterViewModel> PagedList)
+        {
+            Services.Matters.DTOs.MatterFilter filter = null;
+            if (!string.IsNullOrWhiteSpace(PagedList.Search)){
+                filter = Newtonsoft.Json.JsonConvert.DeserializeObject<Services.Matters.DTOs.MatterFilter>(PagedList.Search);
+            }
+
+            var pagination = new PaginationOptions();
+            if (PagedList.CurrentPage > 0)
+            {
+                pagination.Page = PagedList.CurrentPage;
+                pagination.PageSize = 10;
+            }
+            else
+            {
+                pagination.Page = 1;
+                pagination.PageSize = 10;
+            }
+
+            var resultList = _matterService.GetPagedList(pagination.Page, pagination.PageSize, null, filter).ToViewModel();
+            var list = new SelectList(resultList.Results, "Id", "Name");
+            return Json(list);
         }
 
         public ActionResult Create()

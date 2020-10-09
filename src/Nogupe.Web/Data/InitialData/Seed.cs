@@ -84,37 +84,57 @@ namespace Nogupe.Web.Data
                 new Weekday
                 {
                     Id = 1,
-                    Name = "Lunes",
+                    Name = "Lunes 08hs-12hs",
                 },
                 new Weekday
                 {
                     Id = 2,
-                    Name = "Martes",
+                    Name = "Lunes 18hs-22hs",
                 },
                 new Weekday
                 {
                     Id = 3,
-                    Name = "Miercoles",
+                    Name = "Martes 08hs-12hs",
                 },
                 new Weekday
                 {
                     Id = 4,
-                    Name = "Jueves",
+                    Name = "Martes 18hs-22hs",
                 },
                 new Weekday
                 {
                     Id = 5,
-                    Name = "Viernes",
+                    Name = "Miércoles 08hs-12hs",
                 },
                 new Weekday
                 {
                     Id = 6,
-                    Name = "Sabado",
-                },
+                    Name = "Miércoles 18hs-22hs",
+                }, 
                 new Weekday
                 {
                     Id = 7,
-                    Name = "Domingo",
+                    Name = "Jueves 08hs-12hs",
+                },
+                new Weekday
+                {
+                    Id = 8,
+                    Name = "Jueves 18hs-22hs",
+                },
+                new Weekday
+                {
+                    Id = 9,
+                    Name = "Viernes 08hs-12hs",
+                },
+                new Weekday
+                {
+                    Id = 10,
+                    Name = "Viernes 18hs-22hs",
+                },
+                new Weekday
+                {
+                    Id = 11,
+                    Name = "Sábado 08hs-12hs",
                 }
                );
         }

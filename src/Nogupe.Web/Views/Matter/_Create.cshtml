@@ -18,8 +18,8 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CareerId, "Carrera")
-            @Html.DropDownListFor(model => model.CareerId, Model.Careers, "Seleccioné una carrera...", new { @class = "form-control", tabindex = "2" })
+            @Html.LabelFor(model => model.CareerId, "Carreras")
+            @Html.DropDownListFor(model => model.CareerId, Model.Careers, "Seleccioné...", new { @class = "form-control", tabindex = "2" })
             @Html.ValidationMessageFor(model => model.CareerId, "", new { @class = "text-danger" })
         </div>
 

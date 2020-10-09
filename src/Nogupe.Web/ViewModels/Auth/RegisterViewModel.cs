@@ -4,15 +4,20 @@ namespace Nogupe.Web.ViewModels.Auth
 {
     public class RegisterViewModel
     {
-        [Required, MaxLength(50)]
+        [Required(ErrorMessage = "Requerido")]
+        [RegularExpression("^[0-9]{0,8}$", ErrorMessage = "Documento invalido")]
         public string UserName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Requerido")]
         public string FirstName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Requerido")]
         public string LastName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Requerido")]
         public string Email { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Requerido")]
         public string Password { get; set; }
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nogupe.Web.Data;
 
 namespace Nogupe.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201006022749_remove_field_wallId_entity_course")]
+    partial class remove_field_wallId_entity_course
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +97,9 @@ namespace Nogupe.Web.Migrations
                             Email = "admin@admin.com",
                             FirstName = "admin",
                             LastName = "admin",
-                            Password = "babb5681275ccbf4d7423c712e9b4fe3d861d6fe",
+                            Password = "f25d07e690df882c5ac2ba43910e8c070120db55",
                             RoleId = 1,
-                            Salt = "3NHCv8Ptx5840Xk8TH0PTN8fttnoL+TXpDOfVinAC58=",
+                            Salt = "FMlOJJArrPB5GHatdjzrgSGHXb0JwB/KgebjMkZnhr0=",
                             UserName = "admin@admin.com"
                         });
                 });
@@ -175,17 +177,8 @@ namespace Nogupe.Web.Migrations
                     b.Property<int>("CareerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommissionNumber")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("MatterId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

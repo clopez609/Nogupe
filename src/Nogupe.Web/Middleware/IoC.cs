@@ -4,6 +4,7 @@ using Nogupe.Web.Services.Courses;
 using Nogupe.Web.Services.Matters;
 using Nogupe.Web.Services.RoleTypes;
 using Nogupe.Web.Services.Users;
+using Nogupe.Web.Services.Walls;
 using Nogupe.Web.Services.Weekdays;
 
 namespace Nogupe.Web.Middleware
@@ -18,6 +19,7 @@ namespace Nogupe.Web.Middleware
             services.AddTransient<IMatterService, MatterService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IWeekdayService, WeekdayService>();
+            services.AddTransient<IWallService, WallService>();
 
             return services;
         }

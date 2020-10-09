@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Nogupe.Web.Common;
+using System.Collections.Generic;
 
 namespace Nogupe.Web.Entities.Repository
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T : IBaseEntity
     {
+        PagedResult<T> GetPaged(int pageNumber, int pageSize);
+
         IEnumerable<T> GetAll();
 
-        T GetById(int id);
+        T GetById(object keyValues);
 
         void Create(T entity);
 

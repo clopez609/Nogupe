@@ -9,12 +9,12 @@ namespace Nogupe.Web.Entities.Courses
 {
     public class Course : Entity<int>
     {
+        public int CommissionNumber { get; set; }
         public int MatterId { get; set; }
         public int CareerId { get; set; }
         public int WeekdayId { get; set; }
-        public int WallId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public int UserId { get; set; }
 
         public User User { get; set; }

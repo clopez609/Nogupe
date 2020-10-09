@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nogupe.Web.Data;
 
 namespace Nogupe.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201005191912_update_entity_Course_and_seedData")]
+    partial class update_entity_Course_and_seedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +97,9 @@ namespace Nogupe.Web.Migrations
                             Email = "admin@admin.com",
                             FirstName = "admin",
                             LastName = "admin",
-                            Password = "babb5681275ccbf4d7423c712e9b4fe3d861d6fe",
+                            Password = "5f7a86cd10b8f636c70b60d793c624ef3a537851",
                             RoleId = 1,
-                            Salt = "3NHCv8Ptx5840Xk8TH0PTN8fttnoL+TXpDOfVinAC58=",
+                            Salt = "ijhseVtfT5Gcote1rUaaVDftji13ZlCb0rnQ7Rqmg0g=",
                             UserName = "admin@admin.com"
                         });
                 });
@@ -175,19 +177,13 @@ namespace Nogupe.Web.Migrations
                     b.Property<int>("CareerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommissionNumber")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("MatterId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WallId")
                         .HasColumnType("int");
 
                     b.Property<int>("WeekdayId")
@@ -200,6 +196,9 @@ namespace Nogupe.Web.Migrations
                     b.HasIndex("MatterId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("WallId")
+                        .IsUnique();
 
                     b.HasIndex("WeekdayId");
 
@@ -322,9 +321,6 @@ namespace Nogupe.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId")
-                        .IsUnique();
 
                     b.ToTable("Walls");
                 });
@@ -508,6 +504,12 @@ namespace Nogupe.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Nogupe.Web.Entities.Courses.Wall", "Wall")
+                        .WithOne("Course")
+                        .HasForeignKey("Nogupe.Web.Entities.Courses.Course", "WallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Nogupe.Web.Entities.Weekdays.Weekday", "Weekday")
                         .WithMany()
                         .HasForeignKey("WeekdayId")
@@ -565,15 +567,6 @@ namespace Nogupe.Web.Migrations
                     b.HasOne("Nogupe.Web.Entities.Courses.Course", "Course")
                         .WithMany("Tokens")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Nogupe.Web.Entities.Courses.Wall", b =>
-                {
-                    b.HasOne("Nogupe.Web.Entities.Courses.Course", "Course")
-                        .WithOne("Wall")
-                        .HasForeignKey("Nogupe.Web.Entities.Courses.Wall", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

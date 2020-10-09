@@ -70,11 +70,11 @@ namespace Nogupe.Web.Services.Users
 
             if (userRecord != null)
             {
-                result = true;
+                errorCode = "THERE_IS_ALREADY_A_REGISTERED_USER";
             }
             else
             {
-                errorCode = "USERNAME_NOT_REGISTER";
+                result = true;
             }
 
             return new UserValidationResult(result, userRecord, message: messageData, errorCode: errorCode);

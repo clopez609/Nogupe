@@ -4,6 +4,7 @@ using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Careers;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Careers;
+using Nogupe.Web.ViewModels;
 using Nogupe.Web.ViewModels.Career;
 using System;
 using System.Linq;
@@ -20,13 +21,13 @@ namespace Nogupe.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(PagedListResultViewModel<CareerViewModel> PagedList)
         {
             var pagination = new PaginationOptions();
-            if (!String.IsNullOrEmpty(HttpContext.Request.Query["page"]) && !String.IsNullOrEmpty(HttpContext.Request.Query["pageSize"]))
+            if (PagedList.CurrentPage > 0)
             {
-                pagination.Page = int.Parse(HttpContext.Request.Query["page"]);
-                pagination.PageSize = int.Parse(HttpContext.Request.Query["pageSize"]);
+                pagination.Page = PagedList.CurrentPage;
+                pagination.PageSize = 10;
             }
             else
             {
