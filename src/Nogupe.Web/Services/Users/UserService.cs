@@ -68,7 +68,7 @@ namespace Nogupe.Web.Services.Users
             string errorCode = null;
             string messageData = null;
 
-            if (userRecord != null)
+            if (!string.IsNullOrEmpty(userRecord.FirstName))
             {
                 errorCode = "THERE_IS_ALREADY_A_REGISTERED_USER";
             }

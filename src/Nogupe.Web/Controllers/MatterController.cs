@@ -133,20 +133,16 @@ namespace Nogupe.Web.Controllers
             });
         }
 
-        // POST: MatterController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             var matter = _matterService.GetById(id);
 
-            if (matter == null) 
-            {
-                return BadRequest();
-            }
+            if (matter == null) return BadRequest();
 
             _matterService.Delete(matter);
-            return Json(new { success = true });
+
+            return Ok();
         }
     }
 }

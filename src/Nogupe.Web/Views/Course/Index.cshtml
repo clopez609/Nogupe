@@ -1,33 +1,51 @@
-﻿@model PagedListResultViewModel<CourseViewModel>
+﻿@model PagedResult<CourseListDTO>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="box-header card-header">
-                <form asp-action="index" method="get">
-                    <a class="btn btn-success pull-right" asp-area="" asp-controller="Course" asp-action="Create">Nuevo Curso</a>
-                    <input id="btnSearch" type="submit" name="search" class="btn btn-primary float-right pull-right" value="Buscar" />
-                    @Html.TextBoxFor(model => model.Search, new { @class = "form-control float-right pull-right", @style = "width:180px;margin-right:10px;" })
-                </form>
-            </div>
-            <div class="box-body card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                N° Comisión
-                            </th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Results)
-                        {
+@{
+    var role = Context.Session.GetInt32("_Role");
+}
+
+@if (role == 1)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="box-header card-header">
+                    <form asp-action="index" method="get">
+                        <a class="btn btn-success pull-right" asp-area="" asp-controller="Course" asp-action="Create">Nuevo Curso</a>
+                        <input id="btnSearch" type="submit" name="search" class="btn btn-primary float-right pull-right" value="Buscar" />
+                        @Html.TextBoxFor(model => model.Search, new { @class = "form-control float-right pull-right", @style = "width:180px;margin-right:10px;" })
+                    </form>
+                </div>
+                <div class="box-body card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Carrera
+                                </th>
+                                <th scope="col">
+                                    Materia
+                                </th>
+                                <th scope="col">
+                                    Comisión
+                                </th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Results)
+                            {
                             <tr id="row_@item.Id">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CareerName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MatterName)
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CommissionNumber)
                                 </td>
@@ -36,25 +54,99 @@
                                     <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
                                 </td>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-shadow card-footer">
+                    <nav aria-label="Page Navigation">
+                        <ul class="pagination justify-content-center">
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                    <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <div class="box-shadow card-footer">
-                <nav aria-label="Page Navigation">
-                    <ul class="pagination justify-content-center">
-                        @for (int i = 1; i <= Model.PageCount; i++)
+        </div>
+    </div>
+}
+else if(role == 2)
+{
+
+}
+else if(role == 3)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="box-header card-header">
+                    <form id="FormFilter" asp-action="index" method="get">
+                        <input asp-for="Search" type="hidden" id="filterValue" />
+                    </form>
+                    @Html.DropDownListFor(model => model.Search, (IEnumerable<SelectListItem>)ViewBag.Careers, "Seleccioné...", new { id = "ComboCarreras", @class = "form-control float-right pull-right", @style = "width:180px;margin-right:10px;" })
+                    <button class="btn btn-primary pull-right" onclick="OpenModalList()">Mis Clases</button>
+                    <a class="btn btn-primary pull-right text-white">Mis Notas</a>
+                </div>
+                <div class="box-body card-body">
+                    <div class="row">
+                        @foreach (var item in Model.Results)
                         {
-                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                                <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
-                            </li>
+                            <div class="card m-1" id="card_@item.Id" style="width: 15rem;">
+                                <img class="card-img-top" src="~/images/not_image.svg" alt="image course">
+                                <div class="card-body">
+                                    <h5 class="card-title">N° Comisión: @item.CommissionNumber</h5>
+                                    <h6 class="card-subtitle">@item.MatterName</h6>
+                                    <p class="card-text">@item.WeekdayName</p>
+                                    <p class="card-text">@item.UserName</p>
+                                </div>
+                              
+                                <div class="card-footer">
+                                    <button id="btnSubscribe_@item.Id" class="btn btn-sm btn-success" onclick="Subscribe(@item.Id)">Subscribirse</button>
+                                </div>
+                            </div>
                         }
-                    </ul>
-                </nav>
+                    </div>
+                </div>
+                <div class="box-shadow card-footer">
+                    <nav aria-label="Page Navigation">
+                        <ul class="pagination justify-content-center">
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                    <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Modal Clases Alumno -->
+<div class="modal fade" id="listModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Mis Clases</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="CloseModalList()">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Modal Delete -->
 <div class="modal fade" id="deleteModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -81,31 +173,109 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-      
-    });
+            $("#ComboCarreras").change(function () {
+                var idValue = $("#ComboCarreras").val();
+                if (idValue != null) {
+                    var data = {
+                        "CareerId": idValue,
+                    };
+                    $("#filterValue").val(JSON.stringify(data))
+                    $("#FormFilter").submit();
+                }
+                $("#FormFilter").submit();
+            });
 
-    function ConfirmDelete(id) {
-        $('#hiddenId').val(id);
-        $('#deleteModal').modal('show');
-    }
+        });
 
-    function DeleteCourse() {
-        var id = $('#hiddenId').val();
-        console.log(id);
-        var url = "@Url.Action("Delete")";
-        $.ajax({
-            type: "Delete",
-            url: url,
-            data: { id: id },
-            success: function (res) {
-                $('#deleteModal').modal('hide');
-                $("#row_" + id).remove();
-            }
-        })
-    }
+        function OpenModalList() {
+            $('#listModal').modal('show');
+            var url = "@Url.Action("List")";
+            var list = $('.list-group');
+            $.ajax({
+                type: "Get",
+                url: url,
+                success: function (res) {
+                    $.each(res.results, function (k, item) {
+                        var status = item.status == "Accepted" ? "<span class='badge badge-success badge-pill text-white'>" + item.status + "</span>"
+                            : item.status == "Pending" ? "<span class='badge badge-warning badge-pill text-white'>" + item.status + "</span>"
+                                : "<span class='badge badge-danger badge-pill text-white'>" + item.status + "</span>"
+                        list.append("<li class='list-group-item d-flex justify-content-between align-items-center'>" + item.matterName + status + "</li>");
+                    })
+                },
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                },
+            })
+        };
 
-</script>
+        function CloseModalList() {
+            $('#listModal').modal('hide');
+            $('.list-group').empty();
+        };
+
+        function ConfirmDelete(id) {
+            $('#hiddenId').val(id);
+            $('#deleteModal').modal('show');
+        };
+
+        function DeleteCourse() {
+            var id = $('#hiddenId').val();
+            var url = "@Url.Action("Delete")";
+            $.ajax({
+                type: "Delete",
+                url: url,
+                data: { id: id },
+                success: function (res) {
+                    $('#deleteModal').modal('hide');
+                    $("#card_" + id).remove();
+                }
+            });
+        };
+
+        function Subscribe(id) {
+            var url = "@Url.Action("Subscribe")";
+
+            $.ajax({
+                type: "Post",
+                url: url,
+                data: { id: id },
+                success: function (res) {
+                    if (res.success) {
+                        $.toast({
+                            text: 'Subscripción completa!',
+                            hideAfter: 3000,
+                            allowToastClose: true,
+                            showHideTransition: 'fade',
+                            position: 'bottom-center',
+                            icon: 'success'
+                        });
+
+                        $('#btnSubscribe_' + id).prop('disabled', true);
+                        $('#btnSubscribe_' + id).text('Suscripto');
+                        $('#btnSubscribe_' + id).removeClass('btn-success').addClass('btn-secondary');
+                    }
+                    else {
+                        $.toast({
+                            text: 'Ya se encuentra subscripto a este curso',
+                            hideAfter: 3000,
+                            allowToastClose: true,
+                            showHideTransition: 'fade',
+                            position: 'bottom-center',
+                            icon: 'error'
+                        });
+
+                        $('#btnSubscribe_' + id).prop('disabled', true);
+                        $('#btnSubscribe_' + id).text('Suscripto');
+                        $('#btnSubscribe_' + id).removeClass('btn-success').addClass('btn-secondary');
+
+                    }
+                }
+            })
+        };
+
+
+    </script>
 }

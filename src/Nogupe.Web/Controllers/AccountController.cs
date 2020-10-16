@@ -46,6 +46,7 @@ namespace Nogupe.Web.Controllers
 
                     HttpContext.Session.SetInt32("_Id", user.Id);
                     HttpContext.Session.SetString("_User", user.UserName);
+                    HttpContext.Session.SetInt32("_Role", user.RoleId);
 
                     return Redirect("/Home/Index");
                 }

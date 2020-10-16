@@ -20,6 +20,7 @@ namespace Nogupe.Web.Middleware
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IWeekdayService, WeekdayService>();
             services.AddTransient<IWallService, WallService>();
+            services.AddTransient<IInscriptionService, InscriptionService>();
 
             return services;
         }

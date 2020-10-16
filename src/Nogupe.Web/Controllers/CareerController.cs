@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Careers;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Careers;
 using Nogupe.Web.ViewModels;
 using Nogupe.Web.ViewModels.Career;
-using System;
 using System.Linq;
 
 namespace Nogupe.Web.Controllers
@@ -101,20 +99,16 @@ namespace Nogupe.Web.Controllers
             });
         }
 
-        // POST: CareerController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             var career = _careerService.GetById(id);
 
-            if (career == null)
-            {
-                return BadRequest();
-            }
+            if (career == null) return BadRequest();
 
             _careerService.Delete(career);
-            return Json(new { success = true });
+
+            return Ok();
         }
     }
 }

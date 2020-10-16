@@ -7,5 +7,6 @@ namespace Nogupe.Web.Services.Courses.DTOs
         public int? CareerId { get; set; }
         public int? MatterId { get; set; }
         public string Search { get; set; }
+        public int? UserId { get; set; }
     }
 }

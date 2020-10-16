@@ -8,10 +8,10 @@
     <div class="col-md-12">
         <div class="card">
             <div class="box-header card-header">
-                <form method="post">
+                <form asp-action="index" method="get">
                     <button id="btnCreate" type="button" class="btn btn-success pull-right" onclick="CreateCareer()" data-toggle="modal" data-target="myModal">Nueva Carrera</button>
-                    <input id="btnSearch" type="submit" name="btnSearch" class="btn btn-primary float-right pull-right" value="Buscar" />
-                    <input id="searchTerm" type="text" name="searchTerm" class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />
+                    @*<input id="btnSearch" type="submit" name="btnSearch" class="btn btn-primary float-right pull-right" value="Buscar" />
+                        <input id="searchTerm" type="text" name="searchTerm" class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />*@
                 </form>
             </div>
             <div class="box-body card-body">
@@ -27,13 +27,13 @@
                     <tbody>
                         @foreach (var item in Model.Results)
                         {
-                            <tr>
+                            <tr id="row_@item.Id">
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td class="text-center">
                                     <button id="btnEditModal" class="btn btn-sm btn-primary pull-right" onclick="EditCareer(@item.Id)" data-toggle="modal" data-target="editModal">Editar</button> |
-                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="DeleteCareer(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
+                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
                                 </td>
                             </tr>
                         }
@@ -56,13 +56,6 @@
     </div>
 </div>
 
-<div class="toast" aria-live="polite" aria-atomic="true">
-    <div class="toast-body alert-success">
-        Registro guardado.
-    </div>
-</div>
-
-
 <!-- Modal Create -->
 <div class="modal fade" id="createModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -83,18 +76,31 @@
 
 <!-- Modal Delete -->
 <div class="modal fade" id="deleteModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content" id="deleteModalBody">
-            <partial name="_Delete" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmar Borrado</h4>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <h5>¿Esta seguro que desea borrar el registro?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="DeleteCareer()">Borrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
+
+@*hidden field for storing current careerId*@
+<input type="hidden" id="hiddenId" />
 
 @section Scripts {
 
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     $(document).ready(function () {
 
@@ -116,10 +122,10 @@
         })
     };
 
-    function DeleteCareer(id) {
+    function ConfirmDelete(id) {
+        $('#hiddenId').val(id);
         $('#deleteModal').modal('show');
-        $('#deleteModal #id').val(id);
-    }
+    };
 
     function CreateFormCareer() {
 
@@ -153,7 +159,14 @@
             $.post(url, data, function (res) {
                 if (res) {
                     modal.modal('hide');
-                    $('.toast').toast('show');
+                    $.toast({
+                        text: 'Se ha creado un registro',
+                        hideAfter: 3000,
+                        allowToastClose: true,
+                        showHideTransition: 'fade',
+                        position: 'bottom-center',
+                        icon: 'success'
+                    });
                 }
             });
         };
@@ -190,26 +203,42 @@
             $.post(url, data, function (res) {
                 if (res) {
                     modal.modal('hide');
-                    $('.toast').toast('show');
+                    $.toast({
+                        text: 'Se ha actualizado un registro',
+                        hideAfter: 3000,
+                        allowToastClose: true,
+                        showHideTransition: 'fade',
+                        position: 'bottom-center',
+                        icon: 'success'
+                    });
                 }
             });
         };
     }
 
-    function DeleteFormCareer() {
-        var modal = $('#deleteModal');
-        var dataId = modal.find('input[name="id"]').val();
-        var url = "@Url.Action("Delete","Career")"+ dataId;
-
-        $.post(url, function (res) {
-            if (res) {
-                modal.modal('hide');
-                $('.toast').toast('show');
+    function DeleteMatter() {
+        var id = $('#hiddenId').val();
+        var url = "@Url.Action("Delete")";
+        $.ajax({
+            type: "Delete",
+            url: url,
+            data: { id: id },
+            success: function (res) {
+                $('#deleteModal').modal('hide');
+                $("#row_" + id).remove();
+                $.toast({
+                    text: 'Se ha eliminado un registro',
+                    hideAfter: 3000,
+                    allowToastClose: true,
+                    showHideTransition: 'fade',
+                    position: 'bottom-center',
+                    icon: 'error'
+                });
             }
         });
-    }
+    };
 
-</script>
+    </script>
 }
 
 
