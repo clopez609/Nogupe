@@ -20,9 +20,7 @@ namespace Nogupe.Web.Mappings
 
                 cfg.CreateMap<CareerViewModel, Career>();
 
-                cfg.CreateMap<IEnumerable<CareerViewModel>, IEnumerable<Career>>();
-
-                cfg.CreateMap(typeof(PagedResult<Career>), typeof(PagedListResultViewModel<CareerViewModel>));
+                cfg.CreateMap(typeof(PagedListResult<Career>), typeof(PagedListResultViewModel<CareerViewModel>));
 
 
             });
@@ -40,13 +38,8 @@ namespace Nogupe.Web.Mappings
             return Mapper.Map<CareerViewModel>(career);
         }
 
-        public static IEnumerable<CareerViewModel> ToViewModel(this IEnumerable<Career> career)
-        {
-            return Mapper.Map<IEnumerable<CareerViewModel>>(career);
-        }
-
         public static PagedListResultViewModel<CareerViewModel> ToViewModel(
-            this PagedResult<Career> carrers)
+            this PagedListResult<Career> carrers)
         {
             return Mapper.Map<PagedListResultViewModel<CareerViewModel>>(carrers);
         }

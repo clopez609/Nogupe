@@ -1,0 +1,172 @@
+﻿@model PagedListResultViewModel<CourseListViewModel>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="box-body card-body">
+                @if (Model.Entities.Count() > 0)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Carrera
+                                </th>
+                                <th scope="col">
+                                    Materia
+                                </th>
+                                <th scope="col">
+                                    Día
+                                </th>
+                                <th scope="col">
+                                    N° Comisión
+                                </th>
+                                <th scope="col">
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Entities)
+                            {
+                                <tr id="row_@item.Id">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CareerName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MatterName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WeekdayName)
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="openModalInscription(@item.Id)">Solicitudes</button>
+                                        <a class="btn btn-sm btn-success pull-right" asp-controller="Class" asp-action="Index" asp-route-id="@item.Id">Ir a Clase</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h6 class="text-center">¡No tiene materias asignadas!</h6>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Inscripción -->
+<div class="modal fade" id="inscriptionModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lista de Solicitudes</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body inscription-content">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Alumno
+                            </th>
+                            <th scope="col">
+                                Estado
+                            </th>
+                            <th scope="col">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="Inscriptos">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+
+    function loadModalInscriptos(lista) {
+        var grilla = $('#Inscriptos');
+        grilla.empty();
+        $.each(lista, function (e, i) {
+            var estado = i.status == "Accepted" ? "Aceptado" : i.status == "Pending" ? "Pendiente" : "Rechazado";
+            var botonFila = '<button type="button" class="btn btn-success btn-sm" onclick=setStatus(' + i.id + ')><i class="fas fa-check"></i></button> <button type="button" class="btn btn-danger btn-sm" onclick=setStatusReject(' + i.id + ')><i class="fas fa-times"></i></button>'
+            var fila = '<tr id="row_inscription_' + i.id + '"><td>' + i.username + '</td><td>' + estado + '</td><td>' + (i.status == "Pending" ? botonFila : '') + '</td></tr>';
+            grilla.append(fila);
+        })
+    }
+
+    function openModalInscription(id) {
+        var url = "@Url.Action("CourseList", "Inscription")";
+        var grilla = $('#Inscriptos');
+        $.ajax({
+            type: "Get",
+            url: url,
+            data: { id: id },
+            success: function (res) {
+                grilla.empty();
+                $("#message").remove();
+                if (res.entities.length > 0) {
+                    loadModalInscriptos(res.entities);
+                }
+                else {
+                    $('.inscription-content').append('<h6 id="message" class="text-center">¡Aun no hay solicitudes!</h6>');
+                }
+                $('#inscriptionModal').modal('show');
+            },
+            error: function (xhr, status) {
+                alert('Disculpe, existió un problema');
+            },
+        })
+        };
+
+        function setStatus(id) {
+            var url = "@Url.Action("SetStatusAccepted", "Incription")";
+            $.ajax({
+                type: 'Put',
+                url: url,
+                data: {
+                    id: id,
+                },
+                success: function (res) {
+                    var estado = res.status == "Accepted" ? "Aceptado" : res.status == "Pending" ? "Pendiente" : "Rechazado";
+                    $('#row_inscription_' + id).empty();
+                    $('#row_inscription_' + id).append('<td>' + res.username + '</td><td>' + estado + '</td><td></td>')
+                },
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                },
+            })
+        }
+
+        function setStatusReject(id) {
+            var url = "@Url.Action("SetStatusRejected", "Incription")";
+            $.ajax({
+                type: 'Put',
+                url: url,
+                data: {
+                    id: id,
+                },
+                success: function (res) {
+                    var estado = res.status == "Accepted" ? "Aceptado" : res.status == "Pending" ? "Pendiente" : "Rechazado";
+                    $('#row_inscription_' + id).empty();
+                    $('#row_inscription_' + id).append('<td>' + res.username + '</td><td>' + estado + '</td><td></td>')                },
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                },
+            })
+        }
+
+</script>
+}

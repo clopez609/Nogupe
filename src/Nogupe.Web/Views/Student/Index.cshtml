@@ -1,0 +1,70 @@
+﻿@model PagedListResultViewModel<InscriptionListViewModel>
+
+@{
+    ViewData["Title"] = "Cursos";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="box-shadow card-header">
+                <a class="btn btn-success pull-right" asp-action="Create" asp-controller="Inscription">
+                    Inscribirse
+                </a>
+            </div>
+            <div class="box-shadow card-body">
+                @if (Model.Entities.Count() > 0)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    N° Comisión
+                                </th>
+                                <th scope="col">
+                                    Materia
+                                </th>
+                                <th scope="col">
+                                    Día
+                                </th>
+                                <th scope="col">
+                                    Estado
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Entities)
+                            {
+                                <tr id="row_@item.Id">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CommissionNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MatterName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WeekdayName)
+                                    </td>
+                                    <td>
+                                        @if (item.Status == "Accepted")
+                                        {
+                                            <a class="btn btn-sm btn-success pull-right" asp-controller="Class" asp-action="Index" asp-route-id="@item.Id">Ir a Clase</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-warning"> Pendiente </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h6 class="text-center">¡Aun no está inscripto a ninguna materia!</h6>
+                }
+            </div>
+        </div>
+    </div>
+</div>

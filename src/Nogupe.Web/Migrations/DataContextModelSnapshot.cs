@@ -36,17 +36,17 @@ namespace Nogupe.Web.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "admin"
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "profesor"
+                            Name = "Profesor"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "alumno"
+                            Name = "Alumno"
                         });
                 });
 
@@ -95,9 +95,9 @@ namespace Nogupe.Web.Migrations
                             Email = "admin@admin.com",
                             FirstName = "admin",
                             LastName = "admin",
-                            Password = "babb5681275ccbf4d7423c712e9b4fe3d861d6fe",
+                            Password = "1d68ec1f9a786d9c971c12279c10ed62549841a0",
                             RoleId = 1,
-                            Salt = "3NHCv8Ptx5840Xk8TH0PTN8fttnoL+TXpDOfVinAC58=",
+                            Salt = "os5FJ9vHXg2lhvSwaik3U7/qkOaqqYBbmECREYmwy4c=",
                             UserName = "admin@admin.com"
                         });
                 });
@@ -116,6 +116,63 @@ namespace Nogupe.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Careers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Tecnicatura Universitaria en Desarrollo de Software"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Licenciatura en Higiene y Seguridad"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Licenciatura en Logística"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Licenciatura en Gestión Aeroportuaria"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Licenciatura en Comercio Internacional"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Licenciatura en Turismo"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Tecnicatura Universitaria en Higiene y Seguridad"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Tecnicatura Universitaria en Logística"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Tecnicatura Universitaria en Guía de Turismo"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Tecnicatura Universitaria en Hotelería y Turismo"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Tecnicatura Universitaria en Comercio Internacional y Despacho Aduana"
+                        });
                 });
 
             modelBuilder.Entity("Nogupe.Web.Entities.Courses.Assistance", b =>
@@ -151,8 +208,17 @@ namespace Nogupe.Web.Migrations
                     b.Property<string>("Commentary")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("FileId")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("FileId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("WallId")
                         .HasColumnType("int");
@@ -160,6 +226,8 @@ namespace Nogupe.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FileId");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("WallId");
 
@@ -369,9 +437,14 @@ namespace Nogupe.Web.Migrations
                         .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100);
 
+                    b.Property<int>("YearId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CareerId");
+
+                    b.HasIndex("YearId");
 
                     b.ToTable("Matters");
                 });
@@ -449,6 +522,49 @@ namespace Nogupe.Web.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Nogupe.Web.Entities.Years.Year", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Years");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Primer Año"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Segundo Año"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Tercer Año"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Cuarto Año"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Quinto Año"
+                        });
+                });
+
             modelBuilder.Entity("Nogupe.Web.Entities.Auth.User", b =>
                 {
                     b.HasOne("Nogupe.Web.Entities.Auth.RoleType", "RoleType")
@@ -477,9 +593,11 @@ namespace Nogupe.Web.Migrations
                 {
                     b.HasOne("Nogupe.Web.Entities.File", "File")
                         .WithMany()
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FileId");
+
+                    b.HasOne("Nogupe.Web.Entities.Auth.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Nogupe.Web.Entities.Courses.Wall", "Wall")
                         .WithMany("Comments")
@@ -583,6 +701,12 @@ namespace Nogupe.Web.Migrations
                     b.HasOne("Nogupe.Web.Entities.Careers.Career", "Career")
                         .WithMany("Matters")
                         .HasForeignKey("CareerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Nogupe.Web.Entities.Years.Year", "Year")
+                        .WithMany("Matters")
+                        .HasForeignKey("YearId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

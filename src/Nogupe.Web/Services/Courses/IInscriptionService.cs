@@ -12,7 +12,16 @@ namespace Nogupe.Web.Services.Courses
 
         bool ValidateSubscribe(int courseId, int? userId);
 
-        PagedResult<InscriptionListDTO> GetListDTOPaged(int page, int pageSize, string search = null, IFilter customFilter = null);
+        PagedListResult<InscriptionListDTO> GetListDTOPaged(
+            int page, 
+            int pageSize, 
+            string search = null, 
+            IFilter customFilter = null);
 
+        PagedListResult<InscriptionUserListDTO> GetListUser(
+            int page,
+            int pageSize,
+            string search = null,
+            IFilter customFilter = null);
     }
 }

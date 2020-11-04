@@ -1,4 +1,9 @@
 ﻿using AutoMapper;
+using Nogupe.Web.Common;
+using Nogupe.Web.Entities.Auth;
+using Nogupe.Web.Services.Users.DTOs;
+using Nogupe.Web.ViewModels;
+using Nogupe.Web.ViewModels.Auth;
 
 namespace Nogupe.Web.Mappings
 {
@@ -10,11 +15,25 @@ namespace Nogupe.Web.Mappings
         {
             var config = new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<User, UserViewModel>();
 
+                cfg.CreateMap<UserListDTO, UserListViewModel>();
+
+                cfg.CreateMap(typeof(PagedListResult<UserListDTO>), typeof(PagedListResultViewModel<UserListViewModel>));
             });
 
             Mapper = config.CreateMapper();
         }
 
+        public static PagedListResultViewModel<UserListViewModel> ToViewModel(
+           this PagedListResult<UserListDTO> users)
+        {
+            return Mapper.Map<PagedListResultViewModel<UserListViewModel>>(users);
+        }
+
+        public static UserViewModel ToViewModel(this User user)
+        {
+            return Mapper.Map<UserViewModel>(user);
+        }
     }
 }

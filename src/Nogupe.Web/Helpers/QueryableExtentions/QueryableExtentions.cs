@@ -1,6 +1,5 @@
 ﻿using Nogupe.Web.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Nogupe.Web.Helpers.QueryableExtentions
@@ -9,12 +8,12 @@ namespace Nogupe.Web.Helpers.QueryableExtentions
     {
         public static PagedListResult<T> GetPaged<T>(this IQueryable<T> query, int pageNumber, int pageSize)
         {
-            var count = query.Count();
+            double count = (double)((decimal)query.Count() / Convert.ToDecimal(pageSize));
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
             return new PagedListResult<T>
             {
                 Page = pageNumber,
-                Count = count,
+                Count = (int)Math.Ceiling(count),
                 Entities = query.ToList()
             };
         }

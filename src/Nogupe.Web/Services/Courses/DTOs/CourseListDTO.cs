@@ -1,5 +1,4 @@
-﻿using Nogupe.Web.Entities.Enums;
-using System;
+﻿using System;
 
 namespace Nogupe.Web.Services.Courses.DTOs
 {
@@ -10,7 +9,6 @@ namespace Nogupe.Web.Services.Courses.DTOs
         public string CareerName { get; set; }
         public string MatterName { get; set; }
         public string WeekdayName { get; set; }
-
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string UserName { get; set; }

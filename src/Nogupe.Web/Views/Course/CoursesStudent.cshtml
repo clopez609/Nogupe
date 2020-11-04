@@ -1,0 +1,90 @@
+﻿@model PagedListResultViewModel<Nogupe.Web.ViewModels.Inscription.InscriptionListViewModel>
+
+@{
+    ViewData["Title"] = "Mis Cursos";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="box-body card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Carrera
+                            </th>
+                            <th scope="col">
+                                Materia
+                            </th>
+                            <th scope="col">
+                                Comisión
+                            </th>
+                            <th scope="col">
+                                Estado
+                            </th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Entities)
+                        {
+                        <tr id="row_@item.Id">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CareerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MatterName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CommissionNumber)
+                            </td>
+                            <td>
+                                @if (item.Status == "Accepted")
+                                {
+                                    <span class="badge badge-success">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </span>
+                                }
+                                else if (item.Status == "Pending")
+                                {
+                                    <span class="badge badge-warning">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </span>
+                                }
+                                else if (item.Status == "Rejected")
+                                {
+                                    <span class="badge badge-danger">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </span>
+                                }
+
+                            </td>
+                            <td class="text-center">
+                                @if (item.Status == "Accepted")
+                                {
+                                    <a class="btn btn-sm btn-primary" asp-action="Class" asp-route-id="@item.Id">
+                                        <i class="fas fa-chevron-circle-right"></i> Ir a Clase
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-shadow card-footer">
+                <nav aria-label="Page Navigation">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.Page; i++)
+                        {
+                            <li class="@(i == Model.Count ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

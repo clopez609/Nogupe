@@ -1,0 +1,288 @@
+﻿@model WallViewModel
+
+@{
+    ViewData["Title"] = "Clase";
+}
+
+@{
+    var role = Context.Session.GetInt32("_Role");
+}
+
+@if (role == 2)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fas fa-align-justify mr-1"></i>Muro</a>
+                    <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Archivos</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-primary" onclick="openModalRatings()">Calificaciones</button>
+                            <button type="button" class="btn btn-primary" onclick="openModalToken()">Generar Token</button>
+                            @*<form method="post" class="form-control" enctype="multipart/form-data" asp-controller="File" asp-action="UploadFile">
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <input hidden name="WallId" value="@Model.Id" />
+                                        <p>Upload one file using this form:</p>
+                                        <input type="file" name="File" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <input type="submit" value="Upload" />
+                                    </div>
+                                </div>
+                            </form>*@
+                        </div>
+                        <div class="card-body" style="height:400px; overflow:auto">
+                            @if (Model.Comments.Count() <= 0)
+                            {
+                                <h5 class="text-center">¡Todavia no hay mensajes!</h5>
+                            }
+
+                            @*<div class="comments-list">
+                            @foreach (var item in Model.Comments)
+                            {
+                                <div class="media mb-3" style="border-bottom: 1px dotted #ccc">
+                                    <img class="mr-3 mb-1" src="~/images/user.png" alt="user_image" width="46" height="46">
+                                    <div class="media-body">
+                                        <a class="d-flex w-100 justify-content-between">
+                                            <h5 class="mt-0">@item.Username </h5>
+                                            <p class="float-right"><small> @item.Date </small></p>
+                                        </a>
+                                        @item.Commentary
+                                    </div>
+                                </div>
+                            }
+                            </div>*@
+
+                            <div class="comments-list">
+                                @foreach (var msj in Model.Comments)
+                                {
+                                    <a class="list-group-item flex-column align-items-start">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1"> @msj.Username </h6>
+                                            <small class="text-muted"> @msj.Date </small>
+                                        </div>
+                                        <p class="mb-1"> @msj.Commentary </p>
+                                    </a>
+                                }
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <textarea class="form-control comment-text" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-secondary" onclick="postComment(@Model.Id)">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+            </div>
+            
+        </div>
+    </div>
+}
+else if (role == 3)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="text-center"><i class="fas fa-align-justify mr-1"></i>Muro</h6>
+                    <button type="button" class="btn btn-primary" onclick="openModalMyRating()">Mis notas</button>
+                    <button type="button" class="btn btn-primary" onclick="openModalMyAssintance()">Dar asistencia</button>
+                </div>
+                <div class="card-body" style="height:400px; overflow:auto">
+                    @if (Model.Comments.Count() <= 0)
+                    {
+                        <h5 class="text-center">¡Todavia no hay mensajes!</h5>
+                    }
+                    <div class="comments-list">
+                        @foreach (var msj in Model.Comments)
+                        {
+                            <a class="list-group-item flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1"> @msj.Username </h6>
+                                    <small class="text-muted"> @msj.Date </small>
+                                </div>
+                                <p class="mb-1"> @msj.Commentary </p>
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <textarea class="form-control comment-text" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-secondary" onclick="postComment(@Model.Id)">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Modal Notas -->
+<div class="modal fade" id="ratingModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Notas</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body rating-content">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asistencias -->
+<div class="modal fade" id="assistanceModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="text-center">Asistencia</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body assistance-content">
+                <form method="post" id="formToken" asp-action="Assistance" asp-controller="Courses">
+                    <div class="form-group">
+                        @Html.Label("Codigo Token")
+                        @Html.TextBox("Token", "", new { @class = "form-control" })
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" onclick="assistanceToken()">Dar asistencia</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Calificaciones -->
+<div class="modal fade" id="ratingModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Calificaciones</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="" asp-controller="">
+
+                    <input type="button" value="Guardar" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        $(document).ready(function () {
+            setInterval(updateCommentsList, 3000);
+            $.ajaxSetup({ cache: false });
+
+        });
+        
+        function openModalMyRating() {
+            $.ajax({
+                type: 'Get',
+                url: "@Url.Action("Rating", "Student")",
+                success: function (res) {
+                    if (res.length == 0) {
+                        $(".rating-content").html('<h5 class="text-center">¡Todavia no hay notas cargadas!</h5>');
+                    }
+                    $('#ratingModal').modal('show');
+                }
+            });
+        };
+
+        function openModalMyAssintance() {
+            $('#assistanceModal').modal('show');
+        };
+
+        function updateCommentsList() {
+            var location = window.location.pathname;
+            var courseId = parseInt(location.substring(location.length - 1));
+
+            $.ajax({
+                type: 'Get',
+                url: "@Url.Action("Comments", "Class")",
+                data: { id: courseId },
+                success: function (res) {
+                    var lista = $('.comments-list');
+                    lista.empty();
+                    $.each(res.comments, function (e, i) {
+                        var hourFormat = moment(new Date(i.date)).format("MM/DD/YYYY h:mm:ss A");
+                        lista.append('<a class="list-group-item flex-column align-items-start"> <div class="d-flex w-100 justify-content-between"> <h6 class="mb-1">' + i.username + '</h6> <small class="text-muted"> ' + hourFormat + ' </small> </div><p class="mb-1">' + i.commentary + '</p></a>');
+                    });
+                }
+            });
+        }
+
+        function postComment(id) {
+            var mensaje = $(".comment-text");
+            var comentarios = $(".comments-list");
+            var url = "@Url.Action("PostComment", "Class")"
+
+            var model = {
+                WallId : id,
+                Commentary: mensaje.val(),
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: model,
+                success: function (res) {
+                    var hora = moment(new Date(res.date)).format("MM/DD/YYYY h:mm:ss A");
+                    comentarios.append('<a class="list-group-item flex-column align-items-start" id="message_' + res.id + '"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1">' + res.userName + '</h6><small class="text-muted">' + hora + '</small></div><p class="mb-1">' + res.commentary + '</p></a>');
+                    mensaje.val("");
+                    updateCommentsList();
+                },
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                }
+            });
+        }
+
+    </script>
+}

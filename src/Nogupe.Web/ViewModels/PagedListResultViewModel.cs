@@ -1,18 +1,22 @@
-﻿using Nogupe.Web.Common;
-using Nogupe.Web.Models.QueryFilters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Nogupe.Web.ViewModels
 {
-    public class PagedListResultViewModel<T> : PagedResultBase where T : class
+    public class PagedListResultViewModel<TEntity>
     {
-        public string Search { get; set; }
-        public IList<T> Results { get; set; }
+        /// <summary>
+        ///     Page Number
+        /// </summary>
+        public int Page { get; set; }
 
-        public PagedListResultViewModel()
-        {
-            Search = null;
-            Results = new List<T>();
-        }
+        /// <summary>
+        ///     Total number of rows that could be possibly be retrieved.
+        /// </summary>
+        public long Count { get; set; }
+
+        /// <summary>
+        ///     Result of the query.
+        /// </summary>
+        public IEnumerable<TEntity> Entities { get; set; }
     }
 }

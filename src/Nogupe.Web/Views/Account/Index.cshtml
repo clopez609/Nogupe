@@ -1,0 +1,136 @@
+﻿@model PagedListResultViewModel<UserListViewModel>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="box-shadow card-header">
+                <form asp-action="index" method="get">
+                    <a id="btnCreate" class="btn btn-success pull-right" asp-action="PreInscription">Nuevo Usuario</a>
+                    @*<input id="btnSearch" type="submit" name="btnSearch" class="btn btn-primary float-right pull-right" value="Buscar" />
+                    <input id="searchTerm" type="text" name="searchTerm" class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />*@
+                </form>
+            </div>
+            <div class="box-shadow card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Usuario
+                            </th>
+                            <th scope="col">
+                                Nombre
+                            </th>
+                            <th scope="col">
+                                Apellido
+                            </th>
+                            <th scope="col">
+                                Correo Electronico
+                            </th>
+                            <th scope="col">
+                                Tipo de Usuario
+                            </th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Entities)
+                        {
+                            <tr id="row_@item.Id">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Firstname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Lastname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Rolename)
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete -->
+<div class="modal fade" id="deleteModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmar Borrado</h4>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <h5>¿Esta seguro que desea borrar el registro?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="DeleteUser()">Confirmar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*hidden field for storing current userId*@
+<input type="hidden" id="hiddenId" />
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+
+    function ConfirmDelete(id) {
+        $('#hiddenId').val(id);
+        $('#deleteModal').modal('show');
+    };
+
+    function DeleteUser() {
+        var id = $('#hiddenId').val();
+        var url = "@Url.Action("Delete")";
+        $.ajax({
+            type: "Delete",
+            url: url,
+            data: { id: id },
+            success: function (res) {
+                $('#deleteModal').modal('hide');
+                $("#row_" + id).remove();
+                $.toast({
+                    text: 'Se ha eliminado un registro',
+                    hideAfter: 3000,
+                    allowToastClose: true,
+                    showHideTransition: 'fade',
+                    position: 'bottom-center',
+                    icon: 'error'
+                });
+            }
+        });
+    };
+
+    </script>
+}

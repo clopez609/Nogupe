@@ -5,14 +5,13 @@ using Nogupe.Web.Entities.Auth;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Entities.Enums;
 using Nogupe.Web.Entities.Repository;
-using Nogupe.Web.Helpers.LinqExtentions;
 using Nogupe.Web.Helpers.PredicateExtentions;
+using Nogupe.Web.Helpers.QueryableExtentions;
 using Nogupe.Web.Models.QueryFilters;
 using Nogupe.Web.Services.Courses.DTOs;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Nogupe.Web.Services.Courses
 {
@@ -52,10 +51,10 @@ namespace Nogupe.Web.Services.Courses
             Create(inscription);
         }
 
-        public PagedResult<InscriptionListDTO> GetListDTOPaged(
-            int page, 
-            int pageSize, 
-            string search = null, 
+        public PagedListResult<InscriptionListDTO> GetListDTOPaged(
+            int page,
+            int pageSize,
+            string search = null,
             IFilter customFilter = null)
         {
             var includeProperties = "Course,User";
@@ -71,11 +70,38 @@ namespace Nogupe.Web.Services.Courses
             var query = from i in inscriptionQueryable
                         select new InscriptionListDTO
                         {
-                            Id = i.Id,
+                            Id = i.CourseId,
                             CommissionNumber = i.Course.CommissionNumber,
                             CareerName = i.Course.Career.Name,
                             MatterName = i.Course.Matter.Name,
                             WeekdayName = i.Course.Weekday.Name,
+                            Status = i.Status.ToString()
+                        };
+
+            return query.GetPaged(page, pageSize);
+        }
+
+        public PagedListResult<InscriptionUserListDTO> GetListUser(
+            int page,
+            int pageSize,
+            string search = null,
+            IFilter customFilter = null)
+        {
+            var includeProperties = "Course,User";
+            Expression<Func<Inscription, bool>> allFilters = null;
+            if (search != null) allFilters = GetSearchFilter(search);
+            if (customFilter != null)
+                allFilters = allFilters == null
+                    ? GetCustomFilter(customFilter)
+                    : allFilters.AndAlso(GetCustomFilter(customFilter));
+
+            var inscriptionQueryable = GetQueryable(allFilters, includeProperties);
+
+            var query = from i in inscriptionQueryable
+                        select new InscriptionUserListDTO
+                        {
+                            Id = i.Id,
+                            Username = $"{i.User.FirstName} {i.User.LastName}",
                             Status = i.Status.ToString()
                         };
 
@@ -119,6 +145,8 @@ namespace Nogupe.Web.Services.Courses
             Expression<Func<Inscription, bool>> result = execution => true;
 
             if (filter.UserId.HasValue) result = result.AndAlso(x => x.UserId == filter.UserId);
+
+            if (filter.CourseId.HasValue) result = result.AndAlso(x => x.CourseId == filter.CourseId);
 
             return result;
         }

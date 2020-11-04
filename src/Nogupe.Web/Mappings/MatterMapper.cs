@@ -19,9 +19,7 @@ namespace Nogupe.Web.Mappings
 
                 cfg.CreateMap<MatterViewModel, Matter>();
 
-                cfg.CreateMap<IEnumerable<MatterViewModel>, IEnumerable<Matter>>();
-
-                cfg.CreateMap(typeof(PagedResult<Matter>), typeof(PagedListResultViewModel<MatterViewModel>));
+                cfg.CreateMap(typeof(PagedListResult<Matter>), typeof(PagedListResultViewModel<MatterViewModel>));
 
             });
 
@@ -38,13 +36,8 @@ namespace Nogupe.Web.Mappings
             return Mapper.Map<MatterViewModel>(matter);
         }
 
-        public static IEnumerable<MatterViewModel> ToViewModel(this IEnumerable<Matter> matter)
-        {
-            return Mapper.Map<IEnumerable<MatterViewModel>>(matter);
-        }
-
         public static PagedListResultViewModel<MatterViewModel> ToViewModel(
-            this PagedResult<Matter> matters)
+            this PagedListResult<Matter> matters)
         {
             return Mapper.Map<PagedListResultViewModel<MatterViewModel>>(matters);
         }

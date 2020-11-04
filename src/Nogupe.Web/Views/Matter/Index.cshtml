@@ -9,7 +9,10 @@
         <div class="card">
             <div class="box-header card-header">
                 <form asp-action="index" method="get">
-                    <button id="btnCreate" type="button" class="btn btn-success pull-right" onclick="CreateMatter()" data-toggle="modal" data-target="myModal">Nueva Materia</button>
+                    <button id="btnCreate" type="button" class="btn btn-success pull-right" onclick="CreateMatter()" data-toggle="modal" data-target="myModal">
+                        <i class="fas fa-plus mr-1"></i>
+                        Nuevo
+                    </button>
                     @*<input id="btnSearch" type="submit" name="btnSearch" class="btn btn-primary float-right pull-right" value="Buscar" />
                     <input id="searchTerm" type="text" name="searchTerm" class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />*@
                 </form>
@@ -24,16 +27,20 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var item in Model.Results)
+                    <tbody id="content">
+                        @foreach (var item in Model.Entities)
                         {
                             <tr id="row_@item.Id">
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td class="text-center">
-                                    <button id="btnEditModal" class="btn btn-sm btn-primary pull-right" onclick="EditMatter(@item.Id)" data-toggle="modal" data-target="editModal">Editar</button> |
-                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
+                                    <button id="btnEditModal" class="btn btn-sm btn-primary pull-right" onclick="EditMatter(@item.Id)" data-toggle="modal" data-target="editModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -43,10 +50,10 @@
             <div class="box-shadow card-footer">
                 <nav aria-label="Page Navigation">
                     <ul class="pagination justify-content-center">
-                        @for (int i = 1; i <= Model.PageCount; i++)
+                        @for (int i = 1; i <= Model.Count; i++)
                         {
-                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                                <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
+                            <li class="@(i == Model.Page ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new {Page = i})">@i</a>
                             </li>
                         }
                     </ul>
@@ -100,7 +107,7 @@
 
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function () {
 
@@ -162,17 +169,27 @@
         } else {
             var data = form.serialize();
             var url = "@Url.Action("Create","Matter")";
-            $.post(url, data, function (res) {
-                if (res) {
-                    modal.modal('hide');
-                    $.toast({
-                        text: 'Se ha creado un registro',
-                        hideAfter: 3000,
-                        allowToastClose: true,
-                        showHideTransition: 'fade',
-                        position: 'bottom-center',
-                        icon: 'success'
-                    });
+            $.ajax({
+                type: "Post",
+                url: url,
+                data: data,
+                success: function (res) {
+                    if (res) {
+                        var model = res.data;
+                        console.log(model)
+                        modal.modal('hide');
+                        $('#content').append(
+                            "<tr id='row_"+model.id+"'><td>" + model.name + "</td><td class='text-center'><button id='btnEditModal' class='btn btn-sm btn-primary pull-right' onclick='EditMatter("+model.id+")'><i class='fas fa-edit'></i></button> <button id='btnDeleteModal' class='btn btn-sm btn-danger pull-right' onclick='ConfirmDelete("+model.id+")'><i class='fas fa-trash'></i></button></td></tr>");
+
+                        $.toast({
+                            text: 'Se ha creado un registro',
+                            hideAfter: 3000,
+                            allowToastClose: true,
+                            showHideTransition: 'fade',
+                            position: 'bottom-center',
+                            icon: 'success'
+                        });
+                    }
                 }
             });
         };
@@ -250,5 +267,5 @@
         });
     };
 
-    </script>
+</script>
 }

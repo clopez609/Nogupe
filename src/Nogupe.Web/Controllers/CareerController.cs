@@ -19,12 +19,12 @@ namespace Nogupe.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(PagedListResultViewModel<CareerViewModel> PagedList)
+        public IActionResult Index(PagedListResultViewModel<CareerViewModel> parameters)
         {
             var pagination = new PaginationOptions();
-            if (PagedList.CurrentPage > 0)
+            if (parameters.Page > 0)
             {
-                pagination.Page = PagedList.CurrentPage;
+                pagination.Page = parameters.Page;
                 pagination.PageSize = 10;
             }
             else
@@ -37,7 +37,8 @@ namespace Nogupe.Web.Controllers
             return View(resultList);
         }
 
-        public ActionResult Create()
+        [HttpGet]
+        public IActionResult Create()
         {
             var careerViewModel = new CareerViewModel();
             return PartialView("_Create", careerViewModel);
@@ -45,7 +46,7 @@ namespace Nogupe.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CareerViewModel model)
+        public IActionResult Create(CareerViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -66,16 +67,16 @@ namespace Nogupe.Web.Controllers
             });
         }
 
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
             var careerViewModel = _careerService.GetById(id).ToViewModel();
             return PartialView("_edit", careerViewModel);
         }
 
-        // POST: CareerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, CareerViewModel model)
+        public IActionResult Edit(int id, CareerViewModel model)
         {
             var career = _careerService.GetById(id);
 
@@ -100,7 +101,7 @@ namespace Nogupe.Web.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var career = _careerService.GetById(id);
 

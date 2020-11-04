@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nogupe.Web.Data;
 using Nogupe.Web.Middleware;
+using System;
 
 namespace Nogupe.Web
 {
@@ -51,9 +47,8 @@ namespace Nogupe.Web
 
             services.AddSession(opt =>
             {
-                opt.IdleTimeout = TimeSpan.FromMinutes(10);
+                opt.IdleTimeout = TimeSpan.FromMinutes(30);
                 opt.Cookie.HttpOnly = true;
-
                 opt.Cookie.IsEssential = true;
             });
 
@@ -96,7 +91,7 @@ namespace Nogupe.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

@@ -3,8 +3,8 @@ using Nogupe.Web.Common;
 using Nogupe.Web.Data;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Entities.Repository;
-using Nogupe.Web.Helpers.LinqExtentions;
 using Nogupe.Web.Helpers.PredicateExtentions;
+using Nogupe.Web.Helpers.QueryableExtentions;
 using Nogupe.Web.Models.QueryFilters;
 using Nogupe.Web.Services.Courses.DTOs;
 using System;
@@ -21,7 +21,7 @@ namespace Nogupe.Web.Services.Courses
             _context = context;
         }
 
-        public PagedResult<CourseListDTO> GetListDTOPaged(
+        public PagedListResult<CourseListDTO> GetListDTOPaged(
             int page,
             int pageSize,
             string search = null,
@@ -91,6 +91,8 @@ namespace Nogupe.Web.Services.Courses
             Expression<Func<Course, bool>> result = execution => true;
 
             if (filter.CareerId.HasValue) result = result.AndAlso(x => x.CareerId == filter.CareerId);
+
+            if (filter.MatterId.HasValue) result = result.AndAlso(x => x.MatterId == filter.MatterId);
 
             return result;
         }

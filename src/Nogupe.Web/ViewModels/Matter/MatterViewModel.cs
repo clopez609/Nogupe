@@ -8,14 +8,17 @@ namespace Nogupe.Web.ViewModels.Matter
     {
         public int? Id { get; set; }
 
-        [Display(Name = "Nombre")]
         [Required]
         public string Name { get; set; }
 
         [Required]
         public int? CareerId { get; set; }
 
-        [Display(Name = "Carreras")]
+        [Required]
+        public int? YearId { get; set; }
+
         public IEnumerable<SelectListItem> Careers { get; set; }
+        public IEnumerable<SelectListItem> Years { get; set; }
+
     }
 }

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Auth;
+using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.RoleTypes;
 using Nogupe.Web.Services.Users;
+using Nogupe.Web.ViewModels;
 using Nogupe.Web.ViewModels.Auth;
-using System.Linq;
 
 namespace Nogupe.Web.Controllers
 {
@@ -18,6 +20,31 @@ namespace Nogupe.Web.Controllers
         {
             _userService = userService;
             _roleTypeService = roleTypeService;
+        }
+
+        [HttpGet]
+        public IActionResult Index(PagedListResultViewModel<UserListViewModel> parameters, string search)
+        {
+            Services.Users.DTOs.UserFilter filter = null;
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                filter = Newtonsoft.Json.JsonConvert.DeserializeObject<Services.Users.DTOs.UserFilter>(search);
+            }
+            var pagination = new PaginationOptions();
+            if (parameters.Page > 0)
+            {
+                pagination.Page = parameters.Page;
+                pagination.PageSize = 10;
+            }
+            else
+            {
+                pagination.Page = 1;
+                pagination.PageSize = 10;
+            }
+
+            var result = _userService.GetListDTOPaged(pagination.Page, pagination.PageSize, null, filter).ToViewModel();
+
+            return View(result);
         }
 
         [HttpGet]
@@ -71,7 +98,7 @@ namespace Nogupe.Web.Controllers
         {
             var viewModel = new PreRegisterViewModel();
             viewModel.Roles = new SelectList(_roleTypeService.GetAll(), "Id", "Name");
-            
+
             return View(viewModel);
         }
 

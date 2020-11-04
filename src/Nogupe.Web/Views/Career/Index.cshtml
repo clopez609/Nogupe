@@ -9,7 +9,10 @@
         <div class="card">
             <div class="box-header card-header">
                 <form asp-action="index" method="get">
-                    <button id="btnCreate" type="button" class="btn btn-success pull-right" onclick="CreateCareer()" data-toggle="modal" data-target="myModal">Nueva Carrera</button>
+                    <button id="btnCreate" type="button" class="btn btn-success pull-right" onclick="CreateCareer()" data-toggle="modal" data-target="myModal">
+                        <i class="fas fa-plus mr-1"></i>
+                        Nuevo
+                    </button>
                     @*<input id="btnSearch" type="submit" name="btnSearch" class="btn btn-primary float-right pull-right" value="Buscar" />
                         <input id="searchTerm" type="text" name="searchTerm" class="form-control float-right pull-right" style="width:180px;margin-right:10px;" />*@
                 </form>
@@ -25,15 +28,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Results)
+                        @foreach (var item in Model.Entities)
                         {
                             <tr id="row_@item.Id">
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td class="text-center">
-                                    <button id="btnEditModal" class="btn btn-sm btn-primary pull-right" onclick="EditCareer(@item.Id)" data-toggle="modal" data-target="editModal">Editar</button> |
-                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">Borrar</button>
+                                    <button id="btnEditModal" class="btn btn-sm btn-primary pull-right" onclick="EditCareer(@item.Id)" data-toggle="modal" data-target="editModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -43,10 +50,10 @@
             <div class="box-shadow card-footer">
                 <nav aria-label="Page Navigation">
                     <ul class="pagination justify-content-center">
-                        @for (int i = 1; i <= Model.PageCount; i++)
+                        @for (int i = 1; i <= Model.Count; i++)
                         {
-                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                                <a class="page-link" href="@Url.Action("Index", new {CurrentPage = i})">@i</a>
+                            <li class="@(i == Model.Page ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new {Page = i})">@i</a>
                             </li>
                         }
                     </ul>
@@ -86,7 +93,7 @@
                 <h5>¿Esta seguro que desea borrar el registro?</h5>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="DeleteCareer()">Borrar</button>
+                <button type="button" class="btn btn-danger" onclick="DeleteCareer()">Confirmar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             </div>
         </div>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Entities.Auth;
+using Nogupe.Web.Entities.Careers;
 using Nogupe.Web.Entities.Weekdays;
+using Nogupe.Web.Entities.Years;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,6 +17,8 @@ namespace Nogupe.Web.Data
             PopulateRoleTypes(modelBuilder);
             PopulateUsers(modelBuilder);
             PopulateWeekdays(modelBuilder);
+            PopulateCareers(modelBuilder);
+            PopulateYears(modelBuilder);
         }
 
         private static string CreateSalt()
@@ -62,19 +66,113 @@ namespace Nogupe.Web.Data
                 new RoleType
                 {
                     Id = 1,
-                    Name = "admin",
+                    Name = "Admin",
                 },
                 new RoleType
                 {
                     Id = 2,
-                    Name = "profesor",
+                    Name = "Profesor",
                 },
                 new RoleType
                 {
                     Id = 3,
-                    Name = "alumno",
+                    Name = "Alumno",
                 }
                );
+        }
+
+        private static void PopulateYears(ModelBuilder modelBuilder)
+        {
+            // Create years for matter
+            modelBuilder.Entity<Year>().HasData(
+                new Year
+                {
+                    Id = 1,
+                    Name = "Primer Año"
+                },
+                new Year
+                {
+                    Id = 2,
+                    Name = "Segundo Año"
+                },
+                new Year
+                {
+                    Id = 3,
+                    Name = "Tercer Año"
+                },
+                new Year
+                {
+                    Id = 4,
+                    Name = "Cuarto Año"
+                },
+                new Year
+                {
+                    Id = 5,
+                    Name = "Quinto Año"
+                }
+            );
+        }
+
+        private static void PopulateCareers(ModelBuilder modelBuilder)
+        {
+            // Create career
+            modelBuilder.Entity<Career>().HasData(
+                new Career
+                {
+                    Id = 1,
+                    Name = "Tecnicatura Universitaria en Desarrollo de Software"
+                },
+                new Career
+                {
+                    Id = 2,
+                    Name = "Licenciatura en Higiene y Seguridad"
+                },
+                new Career
+                {
+                    Id = 3,
+                    Name = "Licenciatura en Logística"
+                },
+                new Career
+                {
+                    Id = 4,
+                    Name = "Licenciatura en Gestión Aeroportuaria"
+                },
+                new Career
+                {
+                    Id = 5,
+                    Name = "Licenciatura en Comercio Internacional"
+                },
+                new Career
+                {
+                    Id = 6,
+                    Name = "Licenciatura en Turismo"
+                },
+                new Career
+                {
+                    Id = 7,
+                    Name = "Tecnicatura Universitaria en Higiene y Seguridad"
+                },
+                new Career
+                {
+                    Id = 8,
+                    Name = "Tecnicatura Universitaria en Logística"
+                },
+                new Career
+                {
+                    Id = 9,
+                    Name = "Tecnicatura Universitaria en Guía de Turismo"
+                },
+                new Career
+                {
+                    Id = 10,
+                    Name = "Tecnicatura Universitaria en Hotelería y Turismo"
+                },
+                new Career
+                {
+                    Id = 11,
+                    Name = "Tecnicatura Universitaria en Comercio Internacional y Despacho Aduana"
+                }
+            );
         }
 
         private static void PopulateWeekdays(ModelBuilder modelBuilder)

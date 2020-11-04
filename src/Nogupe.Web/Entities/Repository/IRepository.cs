@@ -5,7 +5,7 @@ namespace Nogupe.Web.Entities.Repository
 {
     public interface IRepository<T> where T : IBaseEntity
     {
-        PagedResult<T> GetPaged(int pageNumber, int pageSize);
+        PagedListResult<T> GetPaged(int pageNumber, int pageSize);
 
         IEnumerable<T> GetAll();
 

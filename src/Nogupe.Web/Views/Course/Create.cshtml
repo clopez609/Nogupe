@@ -10,7 +10,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.CommissionNumber, "N° de Comisión")
-        @Html.TextBoxFor(model => model.CommissionNumber, new { @type = "number", @class = "form-control", tabindex = "1" })
+        @Html.TextBoxFor(model => model.CommissionNumber, "{0:#.#}", new { @type = "number", @class = "form-control", tabindex = "1" })
         @Html.ValidationMessageFor(model => model.CommissionNumber, "", new { @class = "text-danger" })
     </div>
 
@@ -27,7 +27,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.WeekdayId, "Dia")
+        @Html.LabelFor(model => model.WeekdayId, "Dia y Horario")
         @Html.DropDownListFor(model => model.WeekdayId, Model.Weekdays, "Seleccioné...", new { @class = "form-control", tabindex = "4" })
         @Html.ValidationMessageFor(model => model.WeekdayId, "", new { @class = "text-danger" })
     </div>

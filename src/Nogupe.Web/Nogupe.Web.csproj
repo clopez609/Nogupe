@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20200831151025_Add_All_Tables.Designer.cs" />
     <Compile Remove="Migrations\20200831153247_Add_All_Tables.cs" />
     <Compile Remove="Migrations\20200831153247_Add_All_Tables.Designer.cs" />
+    <Compile Remove="Migrations\20201019134544_add_year_for_matter.cs" />
+    <Compile Remove="Migrations\20201019134544_add_year_for_matter.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +28,10 @@
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

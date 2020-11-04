@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Data;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Entities.Repository;
+using Nogupe.Web.Services.Walls.DTOs;
 using System;
 using System.Linq;
 
@@ -11,9 +13,38 @@ namespace Nogupe.Web.Services.Walls
     {
         private readonly DataContext _context;
 
+        public static IMapper _mapper;
+
         public WallService(DataContext context) : base(context)
         {
             _context = context;
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Wall, WallDTO>();
+
+                cfg.CreateMap<WallDTO, Wall>();
+
+                cfg.CreateMap<Comment, CommentDTO>()
+                    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.User.FirstName));
+
+                cfg.CreateMap<WallFile, WallFileDTO>();
+
+            });
+
+            _mapper = config.CreateMapper();
+        }
+
+        public WallDTO GetbyIdDTO(int id)
+        {
+            var wall = _context.Set<Wall>()
+                .Include(x => x.Documents).ThenInclude(f => f.File)
+                .Include(x => x.Comments).ThenInclude(x => x.User)
+                .SingleOrDefault(x => x.CourseId == id);
+
+            var wallDTO = _mapper.Map<WallDTO>(wall);
+
+            return wallDTO;
         }
 
         public void CreateWall(Course course)

@@ -8,7 +8,7 @@ namespace Nogupe.Web.Entities.Courses
         public Course Course { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<Document> Documents { get; set; }
+        public virtual ICollection<WallFile> Documents { get; set; }
 
     }
 }

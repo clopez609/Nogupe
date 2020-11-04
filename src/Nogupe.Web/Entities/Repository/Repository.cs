@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Common;
 using Nogupe.Web.Data;
-using Nogupe.Web.Helpers.LinqExtentions;
+using Nogupe.Web.Helpers.QueryableExtentions;
 using System;
 using System.Collections.Generic;
 
@@ -47,7 +47,7 @@ namespace Nogupe.Web.Entities.Repository
             return _context.Set<T>().Find(keyValues);
         }
 
-        public PagedResult<T> GetPaged(
+        public PagedListResult<T> GetPaged(
             int pageNumber,
             int pageSize)
         {

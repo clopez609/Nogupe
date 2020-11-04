@@ -6,6 +6,7 @@ using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Entities.Enums;
 using Nogupe.Web.Entities.Matters;
 using Nogupe.Web.Entities.Weekdays;
+using Nogupe.Web.Entities.Years;
 using System;
 using System.Linq;
 
@@ -35,7 +36,7 @@ namespace Nogupe.Web.Data
         DbSet<Course> Courses { get; set; }
         DbSet<Wall> Walls { get; set; }
         DbSet<Comment> Comments { get; set; }
-        DbSet<Document> Documents { get; set; }
+        DbSet<WallFile> Documents { get; set; }
         DbSet<Token> Tokens { get; set; }
         DbSet<Rating> Ratings { get; set; }
         DbSet<Inscription> Inscriptions { get; set; }
@@ -43,6 +44,9 @@ namespace Nogupe.Web.Data
 
         // Weekday
         DbSet<Weekday> Weekdays { get; set; }
+
+        // Year
+        DbSet<Year> Years { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -89,6 +93,13 @@ namespace Nogupe.Web.Data
 
             #endregion
 
+            #region Year
+
+            modelBuilder.Entity<Year>().HasKey(u => u.Id);
+            modelBuilder.Entity<Year>().Property(u => u.Name).HasMaxLength(50).IsRequired();
+
+            #endregion
+
             #region Career
 
             modelBuilder.Entity<Career>().HasKey(u => u.Id);
@@ -111,6 +122,10 @@ namespace Nogupe.Web.Data
             modelBuilder.Entity<Matter>()
                 .HasMany(e => e.Courses)
                 .WithOne(c => c.Matter);
+
+            modelBuilder.Entity<Matter>()
+                .HasOne(e => e.Year)
+                .WithMany(c => c.Matters);
 
             #endregion
 
@@ -237,14 +252,14 @@ namespace Nogupe.Web.Data
 
             #region Document
 
-            modelBuilder.Entity<Document>().ToTable("Documents").HasKey(u => u.Id);
+            modelBuilder.Entity<WallFile>().ToTable("Documents").HasKey(u => u.Id);
 
-            modelBuilder.Entity<Document>()
+            modelBuilder.Entity<WallFile>()
                 .HasOne(e => e.Wall)
                 .WithMany(e => e.Documents)
                 .HasForeignKey(e => e.WallId);
 
-            modelBuilder.Entity<Document>()
+            modelBuilder.Entity<WallFile>()
                 .HasOne(e => e.File)
                 .WithMany()
                 .HasForeignKey(e => e.FileId);

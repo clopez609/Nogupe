@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Courses;
+using Nogupe.Web.Services.Courses.DTOs;
 using Nogupe.Web.ViewModels;
 using Nogupe.Web.ViewModels.Course;
 
@@ -18,8 +19,9 @@ namespace Nogupe.Web.Mappings
 
                 cfg.CreateMap<CourseViewModel, Course>();
 
-                cfg.CreateMap(typeof(PagedResult<Course>), typeof(PagedListResultViewModel<CourseViewModel>));
+                cfg.CreateMap<CourseListDTO, CourseListViewModel>();
 
+                cfg.CreateMap(typeof(PagedListResult<CourseListDTO>), typeof(PagedListResultViewModel<CourseListViewModel>));
             });
 
             Mapper = config.CreateMapper();
@@ -35,10 +37,10 @@ namespace Nogupe.Web.Mappings
             return Mapper.Map<CourseViewModel>(course);
         }
 
-        public static PagedListResultViewModel<CourseViewModel> ToViewModel(
-            this PagedResult<Course> courses)
+        public static PagedListResultViewModel<CourseListViewModel> ToViewModel(
+            this PagedListResult<CourseListDTO> courses)
         {
-            return Mapper.Map<PagedListResultViewModel<CourseViewModel>>(courses);
+            return Mapper.Map<PagedListResultViewModel<CourseListViewModel>>(courses);
         }
     }
 }

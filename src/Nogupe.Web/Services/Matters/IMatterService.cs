@@ -7,6 +7,10 @@ namespace Nogupe.Web.Services.Matters
 {
     public interface IMatterService : IRepository<Matter>
     {
-        public PagedResult<Matter> GetPagedList(int page, int pageSize, string search = null, IFilter filter = null);
+        public PagedListResult<Matter> GetPagedList(
+            int page, 
+            int pageSize, 
+            string search = null, 
+            IFilter customFilter = null);
     }
 }

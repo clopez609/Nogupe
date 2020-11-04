@@ -3,16 +3,22 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Nogupe.Web</title>
+    <title>NogupeWeb - Aula Virtual</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/jquery-toast-plugin/jquery.toast.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
 </head>
 <body>
+    @{ 
+        var currentUserId = Context.Session.GetInt32("_Id");
+        var currentUser = Context.Session.GetString("_User");
+        var roleUser = Context.Session.GetInt32("_Role");
+    }
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Nogupe.Web</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NogupeWeb</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,25 +26,47 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="nav justify-content-end">
                         @{
-                            if ((Context.Session.GetString("_User")) != null)
+                            if (!string.IsNullOrWhiteSpace(currentUser))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Career" asp-action="Index">Carreras</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Matter" asp-action="Index">Materias</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Cursos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="PreInscription">Usuarios</a>
-                                </li>
+                                if (roleUser == 1)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Career" asp-action="Index">Carreras</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Matter" asp-action="Index">Materias</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Cursos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Usuarios</a>
+                                    </li>
+
+                                }
+                                else if (roleUser == 2)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Teacher" asp-action="Index">Mis Cursos</a>
+                                    </li>
+                                }
+                                else if (roleUser == 3)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">Inscripciones</a>
+                                    </li>
+                                }
                                 <li class="nav-item">
                                     <a class="nav-link">¡Hola! @Context.Session.GetString("_User")</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-dark" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+                                <li class="nav-item dropdown">
+                                    <button class="btn" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-user-circle" style="font-size: 1.5em;" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Perfil</a>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+                                    </div>
                                 </li>
                             }
                             else
@@ -61,7 +89,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Nogupe.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - NogupeWeb
         </div>
     </footer>
 
