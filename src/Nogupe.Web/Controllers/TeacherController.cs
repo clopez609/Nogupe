@@ -3,16 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Courses;
 using Nogupe.Web.Services.Courses.DTOs;
+using Nogupe.Web.Services.Ratings;
+using Nogupe.Web.Services.Ratings.DTOs;
+using Nogupe.Web.ViewModels.Rating;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Nogupe.Web.Controllers
 {
     public class TeacherController : Controller
     {
         private readonly ICourseService _courseService;
+        private readonly IRatingService _ratingService;
 
-        public TeacherController(ICourseService courseService)
+        public TeacherController(ICourseService courseService, IRatingService ratingService)
         {
             _courseService = courseService;
+            _ratingService = ratingService;
         }
 
         [HttpGet]
@@ -27,6 +35,37 @@ namespace Nogupe.Web.Controllers
             var result = _courseService.GetListDTOPaged(1, 50, null, filter).ToViewModel();
 
             return View(result);
+        }
+
+        [HttpGet]
+        public IActionResult RatingList(int id)
+        {
+            Services.Ratings.DTOs.RatingFilter filter = new RatingFilter()
+            {
+                CourseId = id,
+                Status = "None"
+            };
+
+            var result = _ratingService.GetListDTOPaged(1, 50, null, filter).ToViewModel().Entities;
+
+            return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult RatingList(int id, RatingListViewModel model)
+        {
+            var rating = _ratingService.GetById(id);
+
+            if (rating == null) return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                model.ToEntityModel(rating);
+                _ratingService.Update(rating);
+                return Ok(model.Id);
+            }
+
+            return BadRequest();
         }
     }
 }

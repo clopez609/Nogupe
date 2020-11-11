@@ -75,6 +75,19 @@ namespace Nogupe.Web.Controllers
         }
 
         [HttpGet]
+        public IActionResult List(PagedListResultViewModel<CourseListViewModel> parameters, string search)
+        {
+            Services.Courses.DTOs.CourseFilter filter = null;
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                filter = Newtonsoft.Json.JsonConvert.DeserializeObject<Services.Courses.DTOs.CourseFilter>(search);
+            }
+            var resultList = _courseService.GetListDTOPaged(1, 50, null, filter);
+            var list = new SelectList(resultList.Entities, "Id", "CommissionNumber");
+            return Json(list);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             var courseViewModel = new CourseViewModel();

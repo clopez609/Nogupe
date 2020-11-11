@@ -18,13 +18,19 @@
                     <thead>
                         <tr>
                             <th scope="col">
-                                Carrera
+                                Comisión
                             </th>
                             <th scope="col">
                                 Materia
                             </th>
                             <th scope="col">
-                                Comisión
+                                Carrera
+                            </th>
+                            <th scope="col">
+                                Día
+                            </th>
+                            <th scope="col">
+                                Profesor
                             </th>
                             <th scope="col"></th>
                         </tr>
@@ -32,25 +38,33 @@
                     <tbody>
                         @foreach (var item in Model.Entities)
                         {
-                            <tr id="row_@item.Id">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CareerName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.MatterName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CommissionNumber)
-                                </td>
-                                <td class="text-center">
-                                    <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr id="row_@item.Id">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CommissionNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MatterName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CareerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WeekdayName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+
+
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

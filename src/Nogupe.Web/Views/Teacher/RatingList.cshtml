@@ -1,0 +1,54 @@
+﻿@model IEnumerable<RatingListViewModel>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" style="background-color:cadetblue">
+                <h6 class="text-white">Calificaciones</h6>
+            </div>
+            <div class="card-body">
+                @if (Model.Count() < 0)
+                {
+                    <h5 class="text-center">¡Todavia no hay alumnos registrados!</h5>
+                }
+
+                @foreach (var item in Model)
+                {
+                    <form data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" asp-action="RatingList" asp-controller="Teacher">
+                        <partial name="EditorTemplate" model="item" />
+                        <button type="submit" class="btn btn-success mt-2 float-right">Guardar</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        function Success(xhr) {
+            console.log(xhr)
+            $('#row_' + xhr).remove();
+            $.toast({
+                text: `Se cargo el registro correctamente`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'success'
+            });
+        }
+
+        function Failure(xhr) {
+            $.toast({
+                text: `Error: Debe revise los campos vacios`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'error'
+            });
+        };
+    </script>
+}

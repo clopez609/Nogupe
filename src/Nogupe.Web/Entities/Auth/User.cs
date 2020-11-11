@@ -1,6 +1,5 @@
 ﻿using Nogupe.Web.Entities.Courses;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nogupe.Web.Entities.Auth
 {

@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server.Features;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Nogupe.Web.Entities;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Files;
 using Nogupe.Web.Services.Walls;
 using Nogupe.Web.ViewModels.File;
 using Nogupe.Web.ViewModels.Wall;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Nogupe.Web.Controllers
 {
@@ -34,6 +30,11 @@ namespace Nogupe.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(FileUploadViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(v => v.Errors));
+            };
+
             var entity = new WallFile();
 
             if (model.File == null || model.File.Length == 0)
@@ -64,18 +65,29 @@ namespace Nogupe.Web.Controllers
                 FileId = file.Id,
                 WallId = model.WallId,
                 FileName = file.Name,
+                UIdFileName = file.UIdFileName,
                 FileUrl = targetFile
             };
 
             wallFileViewModel.ToEntityModel(entity);
             _wallFileService.Create(entity);
 
-            return Ok(file.UIdFileName);
+            var response = new
+            {
+                wallFileViewModel.Id,
+                wallFileViewModel.FileName,
+                wallFileViewModel.UIdFileName
+            };
+
+            return Ok(response);
         }
 
         public IActionResult DownloadFile(string UIdFileName)
         {
             var fileDb = _fileService.GetAll().Where(x => x.UIdFileName == UIdFileName).SingleOrDefault();
+
+            if (fileDb == null) BadRequest();
+
             var dir = fileDb.DirName.Replace("${uploadPath}",
                 GetUploadDirectory());
             var fullPath = Path.Combine(dir, fileDb.UIdFileName);

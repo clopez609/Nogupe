@@ -2,11 +2,9 @@
 
 namespace Nogupe.Web.ViewModels.Auth
 {
-    public class RegisterViewModel
+    public class ProfileViewModel
     {
-        [Required(ErrorMessage = "Requerido")]
-        [RegularExpression("^[0-9]{0,8}$", ErrorMessage = "Debe ser un documento válido")]
-        public string UserName { get; set; }
+        public int? Id { get; set; }
 
         [Required(ErrorMessage = "Requerido")]
         [StringLength(50, ErrorMessage = "Debe tener entre 5 y 50 caracteres", MinimumLength = 5)]
@@ -19,14 +17,5 @@ namespace Nogupe.Web.ViewModels.Auth
         [Required(ErrorMessage = "Requerido")]
         [EmailAddress(ErrorMessage = "Debe ser un correo electrónico válido")]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "Requerido")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Required(ErrorMessage = "Requerido")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Ambas contraseñas no coinciden")]
-        public string ConfirmPassword { get; set; }
     }
 }

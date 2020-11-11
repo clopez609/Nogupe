@@ -19,6 +19,8 @@ namespace Nogupe.Web.Mappings
 
                 cfg.CreateMap<UserListDTO, UserListViewModel>();
 
+                cfg.CreateMap<ProfileViewModel, User>();
+
                 cfg.CreateMap(typeof(PagedListResult<UserListDTO>), typeof(PagedListResultViewModel<UserListViewModel>));
             });
 
@@ -34,6 +36,11 @@ namespace Nogupe.Web.Mappings
         public static UserViewModel ToViewModel(this User user)
         {
             return Mapper.Map<UserViewModel>(user);
+        }
+
+        public static User ToEntityModel (this ProfileViewModel profileViewModel, User user)
+        {
+            return Mapper.Map(profileViewModel, user);
         }
     }
 }

@@ -58,6 +58,7 @@ namespace Nogupe.Web.Mappings
                     FileId = wallFile.FileId,
                     WallId = wallFile.WallId,
                     FileName = wallFile.File.Name,
+                    UIdFileName = wallFile.File.UIdFileName,
                     FileUrl = GetFilePath(wallFile.File.UIdFileName)
                 });
             }

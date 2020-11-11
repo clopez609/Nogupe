@@ -57,44 +57,44 @@
     </div>
 </div>
 
-<!-- Modal Inscripción -->
-<div class="modal fade" id="inscriptionModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Lista de Solicitudes</h5>
-                <a href="#" class="close" data-dismiss="modal">&times;</a>
-            </div>
-            <div class="modal-body inscription-content">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                Alumno
-                            </th>
-                            <th scope="col">
-                                Estado
-                            </th>
-                            <th scope="col">
+    <!-- Modal Inscripción -->
+    <div class="modal fade" id="inscriptionModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lista de Solicitudes</h5>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body inscription-content">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Alumno
+                                </th>
+                                <th scope="col">
+                                    Estado
+                                </th>
+                                <th scope="col">
 
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="Inscriptos">
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="Inscriptos">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
+        <script>
 
     function loadModalInscriptos(lista) {
         var grilla = $('#Inscriptos');
@@ -132,7 +132,7 @@
         };
 
         function setStatus(id) {
-            var url = "@Url.Action("SetStatusAccepted", "Incription")";
+            var url = "@Url.Action("SetStatusAccepted", "Inscription")";
             $.ajax({
                 type: 'Put',
                 url: url,
@@ -151,7 +151,7 @@
         }
 
         function setStatusReject(id) {
-            var url = "@Url.Action("SetStatusRejected", "Incription")";
+            var url = "@Url.Action("SetStatusRejected", "Inscription")";
             $.ajax({
                 type: 'Put',
                 url: url,
@@ -168,5 +168,5 @@
             })
         }
 
-</script>
-}
+        </script>
+    }

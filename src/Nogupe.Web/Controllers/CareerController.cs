@@ -80,10 +80,7 @@ namespace Nogupe.Web.Controllers
         {
             var career = _careerService.GetById(id);
 
-            if (career == null)
-            {
-                return BadRequest();
-            }
+            if (career == null) return BadRequest();
 
             if (ModelState.IsValid)
             {

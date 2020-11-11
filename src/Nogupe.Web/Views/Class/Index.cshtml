@@ -12,90 +12,108 @@
 {
     <div class="row">
         <div class="col-md-12">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fas fa-align-justify mr-1"></i>Muro</a>
-                    <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Archivos</a>
+            <div class="mb-1">
+                <a class="btn btn-primary" asp-action="RatingList" asp-controller="Teacher" asp-route-id="@Model.CourseId">Calificaciones</a>
+                <button type="button" class="btn btn-primary" onclick="openModalToken()">Generar Token</button>
+            </div>
+            <div class="card">
+                <div class="card-header" style="background-color:cadetblue">
+                    
+                    @*<button type="button" class="btn btn-primary" onclick="openModalFile()">Archivos</button>*@
+                    <h6 class="text-white">Muro</h6>
                 </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <button type="button" class="btn btn-primary" onclick="openModalRatings()">Calificaciones</button>
-                            <button type="button" class="btn btn-primary" onclick="openModalToken()">Generar Token</button>
-                            @*<form method="post" class="form-control" enctype="multipart/form-data" asp-controller="File" asp-action="UploadFile">
-                                <div class="form-group">
-                                    <div class="col-md-10">
-                                        <input hidden name="WallId" value="@Model.Id" />
-                                        <p>Upload one file using this form:</p>
-                                        <input type="file" name="File" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-10">
-                                        <input type="submit" value="Upload" />
-                                    </div>
-                                </div>
-                            </form>*@
-                        </div>
-                        <div class="card-body" style="height:400px; overflow:auto">
-                            @if (Model.Comments.Count() <= 0)
-                            {
-                                <h5 class="text-center">¡Todavia no hay mensajes!</h5>
-                            }
+                <div class="card-body" style="height:400px; overflow:auto">
+                    @if (Model.Comments.Count() <= 0)
+                    {
+                        <h5 class="text-center">¡Todavia no hay mensajes!</h5>
+                    }
 
-                            @*<div class="comments-list">
-                            @foreach (var item in Model.Comments)
-                            {
-                                <div class="media mb-3" style="border-bottom: 1px dotted #ccc">
-                                    <img class="mr-3 mb-1" src="~/images/user.png" alt="user_image" width="46" height="46">
-                                    <div class="media-body">
-                                        <a class="d-flex w-100 justify-content-between">
-                                            <h5 class="mt-0">@item.Username </h5>
-                                            <p class="float-right"><small> @item.Date </small></p>
-                                        </a>
-                                        @item.Commentary
-                                    </div>
-                                </div>
-                            }
-                            </div>*@
-
-                            <div class="comments-list">
-                                @foreach (var msj in Model.Comments)
-                                {
-                                    <a class="list-group-item flex-column align-items-start">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1"> @msj.Username </h6>
-                                            <small class="text-muted"> @msj.Date </small>
-                                        </div>
-                                        <p class="mb-1"> @msj.Commentary </p>
+                    @*<div class="comments-list">
+                        @foreach (var item in Model.Comments)
+                        {
+                            <div class="media mb-3" style="border-bottom: 1px dotted #ccc">
+                                <img class="mr-3 mb-1" src="~/images/user.png" alt="user_image" width="46" height="46">
+                                <div class="media-body">
+                                    <a class="d-flex w-100 justify-content-between">
+                                        <h5 class="mt-0">@item.Username </h5>
+                                        <p class="float-right"><small> @item.Date </small></p>
                                     </a>
-                                }
+                                    @item.Commentary
+                                </div>
                             </div>
+                        }
+                        </div>*@
 
-                        </div>
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <textarea class="form-control comment-text" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
-                                            <div class="input-group-append">
-                                                <button type="button" class="btn btn-secondary" onclick="postComment(@Model.Id)">
-                                                    <i class="fas fa-paper-plane"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                    <div class="comments-list">
+                        @foreach (var msj in Model.Comments)
+                        {
+                            <a class="list-group-item flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1"> @msj.Username </h6>
+                                    <small class="text-muted"> @msj.Date </small>
+                                </div>
+                                <p class="mb-1"> @msj.Commentary </p>
+                            </a>
+                        }
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <textarea class="form-control comment-text" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-secondary" onclick="postComment(@Model.Id)">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
             </div>
-            
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="background-color:cadetblue">
+                    <h6 class="text-white">Archivos</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Documents.Count() <= 0)
+                    {
+                        <h5 class="text-center">¡No hay archivos cargados!</h5>
+                    }
+                    <div class="files-list">
+                        <ul class="list-group" id="fileList">
+                            @foreach (var file in Model.Documents)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center hidden-sm-down">
+                                    @file.FileName
+                                    <a asp-action="DownloadFile" asp-controller="File" asp-route-UIdFileName="@file.UIdFileName">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form enctype="multipart/form-data" data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" asp-controller="File" asp-action="UploadFile">
+                        <input hidden name="WallId" value="@Model.Id" />
+                        <div class="custom-file">
+                            <input type="file" name="File" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Seleccioné archivo</label>
+                        </div>
+                        <button type="submit" class="btn btn-link">Cargar</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -149,23 +167,6 @@ else if (role == 3)
 }
 
 
-<!-- Modal Notas -->
-<div class="modal fade" id="ratingModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Notas</h5>
-                <a href="#" class="close" data-dismiss="modal">&times;</a>
-            </div>
-            <div class="modal-body rating-content">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal Asistencias -->
 <div class="modal fade" id="assistanceModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -192,7 +193,7 @@ else if (role == 3)
 </div>
 
 <!-- Modal Calificaciones -->
-<div class="modal fade" id="ratingModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="ratingModal2" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -200,10 +201,7 @@ else if (role == 3)
                 <a href="#" class="close" data-dismiss="modal">&times;</a>
             </div>
             <div class="modal-body">
-                <form method="post" asp-action="" asp-controller="">
-
-                    <input type="button" value="Guardar" />
-                </form>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -214,26 +212,43 @@ else if (role == 3)
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+<script>
+
+        function Success(xhr) {
+            console.log(xhr)
+            var data = xhr;
+            var files = $("#fileList");
+            files.append('<li class="list-group-item d-flex justify-content-between align-items-center hidden-sm-down">' + data.fileName + '<a href="/File/DownloadFile?UIdFileName=' + data.uIdFileName + '">' + '<i class="fas fa-download"></i ></a></li>');
+        };
+
+        function Failure(xhr) {
+            $.toast({
+                text: `Error: Debe cargar algun archivo`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'error'
+            });
+        };
+
 
         $(document).ready(function () {
             setInterval(updateCommentsList, 3000);
             $.ajaxSetup({ cache: false });
 
-        });
-        
-        function openModalMyRating() {
-            $.ajax({
-                type: 'Get',
-                url: "@Url.Action("Rating", "Student")",
-                success: function (res) {
-                    if (res.length == 0) {
-                        $(".rating-content").html('<h5 class="text-center">¡Todavia no hay notas cargadas!</h5>');
-                    }
-                    $('#ratingModal').modal('show');
-                }
+            // nombre de archivo subido
+            $(".custom-file-input").on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
             });
+
+        });
+
+        function openModalFile() {
+            $('#fileModal').modal('show');
         };
+       
 
         function openModalMyAssintance() {
             $('#assistanceModal').modal('show');
@@ -284,5 +299,5 @@ else if (role == 3)
             });
         }
 
-    </script>
+</script>
 }

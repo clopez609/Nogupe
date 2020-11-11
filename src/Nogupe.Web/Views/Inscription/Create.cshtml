@@ -4,8 +4,7 @@
     ViewData["Title"] = "Inscription";
 }
 
-@using (@Html.BeginForm("Inscription", "Course", FormMethod.Post, new { @class = "form", @style = "width: 35em; margin: auto;" }))
-{
+<form data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" asp-action="Create" asp-controller="Inscription" style="width: 35em; margin: auto;">
     <partial name="_ValidationSummary" />
 
     <div class="form-group">
@@ -36,13 +35,35 @@
         <input type="submit" value="Guardar" class="btn btn-primary btn-block" />
         <a asp-controller="Student" asp-action="index" class="btn btn-secondary btn-block mt-1">Volver</a>
     </div>
-}
+</form>
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
 <script>
+    function Success() {
+        $.toast({
+            text: 'Se ha realizado la inscripción',
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'success'
+        });
+    };
+
+    function Failure(xhr) {
+        $.toast({
+            text: `Error: ${xhr.responseText}!`,
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'error'
+        });
+    }
+
     $(document).ready(function () {
 
             $('#ComboAños').change(function () {

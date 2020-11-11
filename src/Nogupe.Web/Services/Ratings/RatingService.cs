@@ -1,8 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Nogupe.Web.Common;
 using Nogupe.Web.Data;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Entities.Repository;
+using Nogupe.Web.Helpers.PredicateExtentions;
+using Nogupe.Web.Helpers.QueryableExtentions;
 using Nogupe.Web.Models.QueryFilters;
+using Nogupe.Web.Services.Ratings.DTOs;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,6 +20,35 @@ namespace Nogupe.Web.Services.Ratings
         public RatingService(DataContext context) : base(context)
         {
             _context = context;
+        }
+
+        public PagedListResult<RatingListDTO> GetListDTOPaged(
+            int page, 
+            int pageSize, 
+            string search = null, 
+            IFilter customFilter = null)
+        {
+            var includeProperties = "User";
+            Expression<Func<Rating, bool>> allFilters = null;
+            if (search != null) allFilters = GetSearchFilter(search);
+            if (customFilter != null)
+                allFilters = allFilters == null
+                    ? GetCustomFilter(customFilter)
+                    : allFilters.AndAlso(GetCustomFilter(customFilter));
+
+            var ratingQueryable = GetQueryable(allFilters, includeProperties);
+
+            var query = from r in ratingQueryable
+                        select new RatingListDTO
+                        {
+                            Id = r.Id,
+                            UserName = $"{r.User.FirstName} {r.User.LastName}",
+                            OnePartial = r.OnePartial,
+                            TwoPartial = r.TwoPartial,
+                            FinalNote = r.FinalNote,
+                        };
+
+            return query.GetPaged(page, pageSize);
         }
 
         public virtual IQueryable<Rating> GetQueryable(
@@ -50,7 +83,16 @@ namespace Nogupe.Web.Services.Ratings
 
         public Expression<Func<Rating, bool>> GetCustomFilter(IFilter customFilter)
         {
-            throw new NotImplementedException();
+            var filter = (RatingFilter)customFilter;
+
+            Expression<Func<Rating, bool>> result = execution => true;
+
+            if (filter.CourseId.HasValue) result = result.AndAlso(x => x.CourseId == filter.CourseId);
+            if (!string.IsNullOrWhiteSpace(filter.Status)) result.AndAlso(x => x.Status.ToString() == filter.Status);
+
+            return result;
         }
+
+        
     }
 }

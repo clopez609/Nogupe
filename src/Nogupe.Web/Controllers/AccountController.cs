@@ -80,10 +80,10 @@ namespace Nogupe.Web.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorCode);
-                    return View("Login", model);
+                    return View(model);
                 }
             }
-            return View("Login", model);
+            return View(model);
         }
 
         [HttpGet]
@@ -154,16 +154,57 @@ namespace Nogupe.Web.Controllers
                         Password = model.Password
                     };
                     _userService.UpdateUser(user);
-                    return Redirect("/Account/Login");
+
+                    HttpContext.Session.SetInt32("_Id", user.Id);
+                    HttpContext.Session.SetString("_User", user.UserName);
+                    HttpContext.Session.SetInt32("_Role", user.RoleId);
+
+                    return Redirect("/Home/Index");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, result.ErrorCode);
-                    return View("Register", model);
+                    return View(model);
                 }
             }
 
-            return View("Register", model);
+            return View(model);
         }
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            var currentUserId = HttpContext.Session.GetInt32("_Id").Value;
+            var user = _userService.GetById(currentUserId);
+            
+            if (user == null) return BadRequest();
+
+            var profile = new ProfileViewModel()
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+            };
+            return View(profile);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Profile(int id, ProfileViewModel model)
+        {
+            var user = _userService.GetById(id);
+
+            if (user == null) BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                model.ToEntityModel(user);
+                _userService.Update(user);
+                return Redirect("/Home/Index");
+            }
+            return View(model);
+        }
+
     }
 }

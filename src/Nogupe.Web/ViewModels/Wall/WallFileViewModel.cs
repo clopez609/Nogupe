@@ -6,6 +6,7 @@
         public int? WallId { get; set; }
 
         public string FileName { get; set; }
+        public string UIdFileName { get; set; }
         public string FileUrl { get; set; }
 
         public int? FileId { get; set; }
