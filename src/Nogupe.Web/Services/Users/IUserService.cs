@@ -18,5 +18,11 @@ namespace Nogupe.Web.Services.Users
         UserValidationResult ValidateUser(string username, string password);
         UserValidationResult ValidationUserName(string username);
         void UpdateUser(User user);
+
+        bool ValidateToken(string token);
+
+        bool GenerateTokenRecovery(string email);
+
+        void ChangePassword(string token, string password);
     }
 }

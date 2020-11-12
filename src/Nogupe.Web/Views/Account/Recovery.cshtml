@@ -1,0 +1,60 @@
+﻿@model RecoveryPasswordViewModel
+
+<form asp-controller="Account" asp-action="Recovery" data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" class="form-signin" style="width:100%; max-width:440px; padding:15px; margin:auto;">
+
+    <h3 class="h3 mb-3 font-weight-normal text-center">Escribe tu Nueva Contraseña</h3>
+
+    @Html.HiddenFor(model => model.Token)
+
+    <partial name="_ValidationSummary" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Password, "Contraseña")
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ConfirmPassword, "Confirmar Contraseña")
+        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Guardar</button>
+
+</form>
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+    <script type="text/javascript">
+
+        function Success() {
+            $.toast({
+                text: `Cambio de contraseña exitoso`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'success'
+            });
+        };
+
+        function Failure() {
+            $.toast({
+                text: `Error: Correo Inexistente`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'error'
+            });
+        };
+
+        $(document).ready(function () {
+
+        });
+
+    </script>
+}

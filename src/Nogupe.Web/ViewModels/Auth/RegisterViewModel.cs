@@ -20,6 +20,16 @@ namespace Nogupe.Web.ViewModels.Auth
         [EmailAddress(ErrorMessage = "Debe ser un correo electrónico válido")]
         public string Email { get; set; }
 
+        public int? Phone { get; set; }
+        
+        public int? CellPhone { get; set; }
+
+        [Required(ErrorMessage = "Requerido")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Requerido")]
+        public int AdressNumber { get; set; }
+
         [Required(ErrorMessage = "Requerido")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

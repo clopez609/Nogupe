@@ -151,6 +151,10 @@ namespace Nogupe.Web.Controllers
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Email = model.Email,
+                        Phone = model.Phone,
+                        CellPhone = model.CellPhone,
+                        Address = model.Address,
+                        AdressNumber = model.AdressNumber,
                         Password = model.Password
                     };
                     _userService.UpdateUser(user);
@@ -176,7 +180,7 @@ namespace Nogupe.Web.Controllers
         {
             var currentUserId = HttpContext.Session.GetInt32("_Id").Value;
             var user = _userService.GetById(currentUserId);
-            
+
             if (user == null) return BadRequest();
 
             var profile = new ProfileViewModel()
@@ -185,6 +189,10 @@ namespace Nogupe.Web.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
+                Phone = user.Phone,
+                CellPhone = user.CellPhone,
+                Address = user.Address,
+                AdressNumber = user.AdressNumber
             };
             return View(profile);
         }
@@ -206,5 +214,53 @@ namespace Nogupe.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult StartRecovery()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult StartRecovery(RecoveryViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (!_userService.GenerateTokenRecovery(model.Email))
+            {
+                return BadRequest();
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Recovery(string token)
+        {
+            var model = new RecoveryPasswordViewModel();
+            if (_userService.ValidateToken(token))
+            {
+                model.Token = token;
+                return View(model);
+            }
+
+            ModelState.AddModelError(string.Empty, "Tu Token ha Expirado");
+            return View(nameof(Login));
+        }
+
+        [HttpPost]
+        public IActionResult Recovery(RecoveryPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            _userService.ChangePassword(model.Token, model.Password);
+
+            return View(nameof(Login));
+        }
     }
 }

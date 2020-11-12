@@ -15,6 +15,8 @@
     <Compile Remove="Migrations\20200831153247_Add_All_Tables.Designer.cs" />
     <Compile Remove="Migrations\20201019134544_add_year_for_matter.cs" />
     <Compile Remove="Migrations\20201019134544_add_year_for_matter.Designer.cs" />
+    <Compile Remove="Migrations\20201111233031_Update_Entity_User.cs" />
+    <Compile Remove="Migrations\20201111233031_Update_Entity_User.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -61,8 +61,13 @@ namespace Nogupe.Web.Data
             modelBuilder.Entity<User>().Property(u => u.UserName).HasMaxLength(25).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.FirstName).HasMaxLength(50);
             modelBuilder.Entity<User>().Property(u => u.LastName).HasMaxLength(50);
+            modelBuilder.Entity<User>().Property(u => u.Address).HasMaxLength(50);
+            modelBuilder.Entity<User>().Property(u => u.AdressNumber).HasMaxLength(10);
+            modelBuilder.Entity<User>().Property(u => u.Phone).HasMaxLength(10);
+            modelBuilder.Entity<User>().Property(u => u.CellPhone).HasMaxLength(50);
             modelBuilder.Entity<User>().Property(u => u.Password).HasColumnType("char(40)");
             modelBuilder.Entity<User>().Property(u => u.Salt).HasColumnType("char(44)");
+            modelBuilder.Entity<User>().Property(u => u.TokenRecovery).HasMaxLength(200);
             modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(254);
 
             modelBuilder.Entity<User>()

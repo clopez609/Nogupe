@@ -1,0 +1,51 @@
+﻿@model RecoveryViewModel
+
+<form asp-controller="Account" asp-action="StartRecovery" data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" class="form-signin" style="width:100%; max-width:440px; padding:15px; margin:auto;">
+
+    <h3 class="h3 mb-3 font-weight-normal text-center">Recupero de Contraseña</h3>
+
+    <partial name="_ValidationSummary" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, "Escribe tu Correo Electronico")
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Recuperar</button>
+</form>
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); };
+
+    <script type="text/javascript">
+
+        function Success() {
+            $.toast({
+                text: `Revise su casilla de correo`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'success'
+            });
+        };
+
+        function Failure() {
+            $.toast({
+                text: `Error: Correo Inexistente`,
+                hideAfter: 3000,
+                allowToastClose: true,
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'error'
+            });
+        };
+
+        $(document).ready(function () {
+
+        });
+
+    </script>
+}

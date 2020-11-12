@@ -11,6 +11,8 @@ using Nogupe.Web.Services.Users.DTOs;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -134,6 +136,75 @@ namespace Nogupe.Web.Services.Users
 
             base.Update(userRecord);
         }
+        public void ChangePassword(string token, string password)
+        {
+            var userRecord = _context.Set<User>().FirstOrDefault(x => x.TokenRecovery == token);
+            var salt = CreateSalt();
+            userRecord.Salt = salt;
+            userRecord.Password = CreatePasswordHash(password, salt);
+            userRecord.TokenRecovery = null;
+
+            base.Update(userRecord);
+        }
+
+        public bool ValidateToken(string token)
+        {
+            var userRecord = _context.Set<User>().FirstOrDefault(x => x.TokenRecovery == token);
+
+            if (userRecord == null) return false;
+
+            return true;
+        }
+
+        public bool GenerateTokenRecovery(string email)
+        {
+            var userRecord = _context.Set<User>().FirstOrDefault(x => x.Email == email);
+
+            if (userRecord == null) return false;
+
+            string Token = GetSha256(Guid.NewGuid().ToString());
+
+            userRecord.TokenRecovery = Token;
+            base.Update(userRecord);
+
+            SendEmail(email, Token);
+
+            return true;
+        }
+
+        private static void SendEmail(string email, string token)
+        {
+            string EmailOrigin = "christianlopez1605@gmail.com";
+            string PasswordOrigin = "6G6ZQD2LJ6";
+            string Url = "http://localhost:44399/Account/Recovery/?token="+token;
+
+            MailMessage oMailMessage = new MailMessage(EmailOrigin, email, "Recuperar Contraseña",
+                "<p>Correo para recuperación de contraseña</p><br>" +
+                "<a href='" + Url + "'>Click para recuperar</a>");
+
+            oMailMessage.IsBodyHtml = true;
+
+            SmtpClient oSmtpClient = new SmtpClient("smtp.gmail.com");
+            oSmtpClient.EnableSsl = true;
+            oSmtpClient.UseDefaultCredentials = false;
+            oSmtpClient.Port = 587;
+            oSmtpClient.Credentials = new NetworkCredential(EmailOrigin, PasswordOrigin);
+
+            oSmtpClient.Send(oMailMessage);
+
+            oSmtpClient.Dispose();
+        }
+
+        private static string GetSha256(string str)
+        {
+            SHA256 sha256 = SHA256Managed.Create();
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] stream = null;
+            StringBuilder sb = new StringBuilder();
+            stream = sha256.ComputeHash(encoding.GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
+        }
 
         public static string CreateSalt()
         {
@@ -188,5 +259,7 @@ namespace Nogupe.Web.Services.Users
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

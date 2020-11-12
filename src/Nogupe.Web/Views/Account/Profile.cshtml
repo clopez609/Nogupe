@@ -30,6 +30,30 @@
         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
     </div>
 
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone, "Telefono")
+        @Html.TextBoxFor(model => model.Phone, "{0:#.#}", new { @class = "form-control", tabindex = "4" })
+        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CellPhone, "Celular")
+        @Html.TextBoxFor(model => model.CellPhone, "{0:#.#}", new { @class = "form-control", tabindex = "5" })
+        @Html.ValidationMessageFor(model => model.CellPhone, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, "Dirección")
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", tabindex = "6" })
+        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AdressNumber, "N° Dirección")
+        @Html.TextBoxFor(model => model.AdressNumber, "{0:#.#}", new { @type = "number", @class = "form-control", tabindex = "7" })
+        @Html.ValidationMessageFor(model => model.AdressNumber, "", new { @class = "text-danger" })
+    </div>
+
     @*<div class="form-group">
             @Html.LabelFor(model => model.Password, "Nueva Contraseña")
             @Html.PasswordFor(model => model.Password, new { @class = "form-control", tabindex = "4" })
