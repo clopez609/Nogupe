@@ -1,27 +1,33 @@
-﻿@model RatingListViewModel
+﻿@*@model RatingListViewModel
 
-    <div class="form-row" id="row_@Model.Id">
+<form method="put">
+    <table>
+        <tr class="row">
+            <td class="col-3">
+                @Html.HiddenFor(model => model.Id)
+                @Html.LabelFor(model => model.Username, "Alumno")
+                @Html.TextBoxFor(model => model.Username, new { @class = "form-control", disabled = "disabled" })
+            </td>
+            <td class="col-2">
+                @Html.LabelFor(model => model.Username, "1° Nota")
+                @Html.TextBoxFor(model => model.OnePartial, "{0:#.#}", new { @type = "number", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.OnePartial, "", new { @class = "text-danger" })
+            </td>
+            <td class="col-2">
+                @Html.LabelFor(model => model.Username, "2° Nota")
+                @Html.TextBoxFor(model => model.TwoPartial, "{0:#.#}", new { @type = "number", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TwoPartial, "", new { @class = "text-danger" })
+            </td>
+            <td class="col-2">
+                @Html.LabelFor(model => model.Username, "3° Nota")
+                @Html.TextBoxFor(model => model.FinalNote, "{0:#.#}", new { @type = "number", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FinalNote, "", new { @class = "text-danger" })
+            </td>
+            <td class="col mt-auto">
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </td>
+        </tr>
+    </table>
+    
 
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="col-3">
-            @Html.LabelFor(model => model.Username, "Alumno")
-            @Html.TextBoxFor(model => model.Username, new { @class = "form-control", disabled = "disabled" })
-        </div>
-        <div class="col">
-            @Html.LabelFor(model => model.Username, "1° Nota")
-            @Html.TextBoxFor(model => model.OnePartial, "{0:#.#}", new { @type = "number", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.OnePartial, "", new { @class = "text-danger" })
-        </div>
-        <div class="col">
-            @Html.LabelFor(model => model.Username, "2° Nota")
-            @Html.TextBoxFor(model => model.TwoPartial, "{0:#.#}", new { @type = "number", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TwoPartial, "", new { @class = "text-danger" })
-        </div>
-        <div class="col">
-            @Html.LabelFor(model => model.Username, "3° Nota")
-            @Html.TextBoxFor(model => model.FinalNote, "{0:#.#}", new { @type = "number", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.FinalNote, "", new { @class = "text-danger" })
-        </div>
-
-    </div>
+</form>*@

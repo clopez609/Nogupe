@@ -1,12 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Nogupe.Web.Common;
 using Nogupe.Web.Data;
+using Nogupe.Web.Entities;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Entities.Repository;
 using Nogupe.Web.Helpers.PredicateExtentions;
 using Nogupe.Web.Helpers.QueryableExtentions;
 using Nogupe.Web.Models.QueryFilters;
 using Nogupe.Web.Services.Courses.DTOs;
+using Nogupe.Web.Services.Files.DTOs;
+using Nogupe.Web.Services.Ratings.DTOs;
+using Nogupe.Web.Services.Walls.DTOs;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,9 +21,46 @@ namespace Nogupe.Web.Services.Courses
     public class CourseService : Repository<Course>, ICourseService
     {
         private readonly DataContext _context;
+
+        public static IMapper _mapper;
+
         public CourseService(DataContext context) : base(context)
         {
-            _context = context;
+            _context = context; 
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Course, CourseDTO>();
+
+                cfg.CreateMap<Comment, CommentDTO>()
+                    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => src.User.FirstName));
+
+                cfg.CreateMap<File, FileDTO>();
+
+                cfg.CreateMap<Inscription, InscriptionDTO>()
+                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+
+                cfg.CreateMap<Rating, RatingDTO>()
+                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+            });
+
+            _mapper = config.CreateMapper();
+        }
+
+        public CourseDTO GetByIdDTO(int id)
+        {
+            var course = _context.Set<Course>()
+                   .Include(x => x.Assistances)
+                   .Include(x => x.Inscriptions)
+                   .Include(x => x.Ratings)
+                   .Include(x => x.Files)
+                   .Include(x => x.Comments)
+                   .Include(x => x.Tokens)
+                   .FirstOrDefault(x => x.Id == id);
+
+            var courseDTO = _mapper.Map<CourseDTO>(course);
+
+            return courseDTO;
         }
 
         public PagedListResult<CourseListDTO> GetListDTOPaged(

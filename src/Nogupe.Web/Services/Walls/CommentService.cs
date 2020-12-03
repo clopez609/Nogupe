@@ -35,9 +35,9 @@ namespace Nogupe.Web.Services.Walls
         public Comment Create(CommentDetailDTO commentDetailDTO, UserViewModel userViewModel)
         {
             var comment = _mapper.Map<Comment>(commentDetailDTO);
-            comment.Date = DateTime.Now;
+
+            comment.CreatedDate = DateTime.Now;
             comment.UserId = userViewModel.Id;
-            comment.UserName = $"{userViewModel.Firstname} {userViewModel.Lastname}";
 
             Create(comment);
 

@@ -16,7 +16,7 @@
         var roleUser = Context.Session.GetInt32("_Role");
     }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NogupeWeb</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -24,44 +24,44 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="nav justify-content-end">
+                    <ul class="nav justify-content-center">
                         @{
                             if (!string.IsNullOrWhiteSpace(currentUser))
                             {
                                 if (roleUser == 1)
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Career" asp-action="Index">Carreras</a>
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="Career" asp-action="Index">Carreras</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Matter" asp-action="Index">Materias</a>
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="Matter" asp-action="Index">Materias</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Cursos</a>
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="Course" asp-action="Index">Cursos</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Usuarios</a>
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="Account" asp-action="Index">Usuarios</a>
                                     </li>
 
                                 }
                                 else if (roleUser == 2)
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Teacher" asp-action="Index">Mis Cursos</a>
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="Teacher" asp-action="Index">Mis Cursos</a>
                                     </li>
                                 }
                                 else if (roleUser == 3)
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">Inscripciones</a>
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="Student" asp-action="Index">Inscripciones</a>
                                     </li>
                                 }
                                 <li class="nav-item">
-                                    <a class="nav-link">¡Hola! @Context.Session.GetString("_User")</a>
+                                    <a class="nav-link text-white">¡Hola! @Context.Session.GetString("_User")</a>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <button class="btn" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-user-circle" style="font-size: 1.5em;" aria-hidden="true"></i>
+                                        <i class="fas fa-user-circle" style="font-size: 1.5em; color:white" aria-hidden="true"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                                         <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Perfil</a>
@@ -90,7 +90,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top bg-dark footer text-white-50">
         <div class="container">
             &copy; 2020 - NogupeWeb
         </div>

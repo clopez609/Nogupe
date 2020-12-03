@@ -131,7 +131,11 @@
                 success: function (res) {
                     $('#deleteModal').modal('hide');
                     $("#card_" + id).remove();
-                }
+                },
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                },
+                
             });
         };
 

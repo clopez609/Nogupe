@@ -1,4 +1,4 @@
-﻿@model WallViewModel
+﻿@model CourseDetailViewModel
 
 @{
     ViewData["Title"] = "Clase";
@@ -13,13 +13,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="mb-1">
-                <a class="btn btn-primary" asp-action="RatingList" asp-controller="Teacher" asp-route-id="@Model.CourseId">Calificaciones</a>
-                <button type="button" class="btn btn-primary" onclick="openModalToken()">Generar Token</button>
+                <button type="button" class="btn btn-primary" onclick="openModalRating()">Cargar Notas</button>
+                <button type="button" class="btn btn-primary" onclick="openModalToken()">Tomar Asistencia</button>
             </div>
             <div class="card">
                 <div class="card-header" style="background-color:cadetblue">
-                    
-                    @*<button type="button" class="btn btn-primary" onclick="openModalFile()">Archivos</button>*@
                     <h6 class="text-white">Muro</h6>
                 </div>
                 <div class="card-body" style="height:400px; overflow:auto">
@@ -50,7 +48,7 @@
                             <a class="list-group-item flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1"> @msj.Username </h6>
-                                    <small class="text-muted"> @msj.Date </small>
+                                    <small class="text-muted"> @msj.CreatedDate </small>
                                 </div>
                                 <p class="mb-1"> @msj.Commentary </p>
                             </a>
@@ -85,13 +83,13 @@
                     <h6 class="text-white">Archivos</h6>
                 </div>
                 <div class="card-body">
-                    @if (Model.Documents.Count() <= 0)
+                    @if (Model.Files.Count() <= 0)
                     {
                         <h5 class="text-center">¡No hay archivos cargados!</h5>
                     }
                     <div class="files-list">
                         <ul class="list-group" id="fileList">
-                            @foreach (var file in Model.Documents)
+                            @foreach (var file in Model.Files)
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center hidden-sm-down">
                                     @file.FileName
@@ -138,7 +136,7 @@ else if (role == 3)
                             <a class="list-group-item flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1"> @msj.Username </h6>
-                                    <small class="text-muted"> @msj.Date </small>
+                                    <small class="text-muted"> @msj.CreatedDate </small>
                                 </div>
                                 <p class="mb-1"> @msj.Commentary </p>
                             </a>
@@ -148,16 +146,18 @@ else if (role == 3)
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <textarea class="form-control comment-text" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary" onclick="postComment(@Model.Id)">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
+                            <form  data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" asp-action="PostComment" asp-controller="Class" asp-route-id="@Model.Id">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <textarea class="form-control comment-text" name="Commentary" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-secondary">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -169,7 +169,7 @@ else if (role == 3)
 
 
 <!-- Modal Asistencias -->
-<div class="modal fade" id="assistanceModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<!--<div class="modal fade" id="assistanceModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -190,18 +190,43 @@ else if (role == 3)
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <!-- Modal Calificaciones -->
-<div class="modal fade" id="ratingModal2" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="ratingStudents" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Calificaciones</h5>
+                <h5 class="modal-title">Listado de Notas</h5>
                 <a href="#" class="close" data-dismiss="modal">&times;</a>
             </div>
             <div class="modal-body">
-                
+                <table class="table" id="table-form">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Nota 1º</th>
+                            <th>Nota 2º</th>
+                            <th>Nota Final</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Ratings)
+                        {
+                            <tr>
+                                <td> 
+                                    <input type="hidden" id="alumnoId" value="@user.Id" />
+                                    @user.Username 
+                                </td>
+                                <td><input type="number" min="0" max="10" id="nota1" required></td>
+                                <td><input type="number" min="0" max="10" id="nota2" required></td>
+                                <td><input type="number" min="0" max="10" id="nota3" required></td>
+                                <td><button type="submit" class="btn btn-success" onclick="LoadRating()">Cargar</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -213,6 +238,35 @@ else if (role == 3)
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script>
+        function openModalRating() {
+            $('#ratingStudents').modal('show');
+        };
+
+        function LoadRating() {
+            var id = $('#alumnoId').val();
+            var nota1 = $('#nota1').val();
+            var nota2 = $('#nota2').val();
+            var nota3 = $('#nota3').val();
+
+            var formData = {
+                Id: id,
+                OnePartial: nota1,
+                TwoPartial: nota2,
+                FinalNote: nota3
+            };
+
+            $.ajax({
+                type: 'Put',
+                url: "@Url.Action("UpdateRating", "Class")",
+                data: formData,
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                }
+            });
+        };
 
         function Success(xhr) {
             console.log(xhr)
@@ -234,7 +288,7 @@ else if (role == 3)
 
 
         $(document).ready(function () {
-            setInterval(updateCommentsList, 3000);
+            //setInterval(updateCommentsList, 3000);
             $.ajaxSetup({ cache: false });
 
             // nombre de archivo subido
@@ -244,15 +298,10 @@ else if (role == 3)
             });
 
         });
-
-        function openModalFile() {
-            $('#fileModal').modal('show');
-        };
        
-
-        function openModalMyAssintance() {
-            $('#assistanceModal').modal('show');
-        };
+        //function openModalMyAssintance() {
+        //    $('#assistanceModal').modal('show');
+        //};
 
         function updateCommentsList() {
             var location = window.location.pathname;

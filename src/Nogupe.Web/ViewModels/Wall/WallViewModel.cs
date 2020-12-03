@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Nogupe.Web.ViewModels.Comment;
+using System.Collections.Generic;
 
 namespace Nogupe.Web.ViewModels.Wall
 {

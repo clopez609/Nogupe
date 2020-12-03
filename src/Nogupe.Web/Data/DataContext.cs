@@ -34,9 +34,7 @@ namespace Nogupe.Web.Data
 
         // Course
         DbSet<Course> Courses { get; set; }
-        DbSet<Wall> Walls { get; set; }
         DbSet<Comment> Comments { get; set; }
-        DbSet<WallFile> Documents { get; set; }
         DbSet<Token> Tokens { get; set; }
         DbSet<Rating> Ratings { get; set; }
         DbSet<Inscription> Inscriptions { get; set; }
@@ -79,18 +77,7 @@ namespace Nogupe.Web.Data
             modelBuilder.Entity<RoleType>().Property(u => u.Name).HasMaxLength(100).IsRequired();
 
             #endregion Auth
-
-            #region Files
-
-            modelBuilder.Entity<File>().HasKey(u => u.Id);
-            modelBuilder.Entity<File>().Property(u => u.Name).HasMaxLength(255).IsRequired();
-            modelBuilder.Entity<File>().Property(u => u.DirName).HasMaxLength(260).IsRequired();
-            modelBuilder.Entity<File>().Property(u => u.UIdFileName).HasMaxLength(260).IsRequired();
-
-            //modelBuilder.Entity<File>().HasIndex(u => u.UIdFileName).IsUnique();
-
-            #endregion Files
-
+            
             #region Weekday
 
             modelBuilder.Entity<Weekday>().HasKey(u => u.Id);
@@ -119,7 +106,7 @@ namespace Nogupe.Web.Data
 
             modelBuilder.Entity<Matter>().HasKey(u => u.Id);
             modelBuilder.Entity<Matter>().Property(u => u.Name).HasMaxLength(100).IsRequired();
-            
+
             modelBuilder.Entity<Matter>()
                 .HasOne(e => e.Career)
                 .WithMany(c => c.Matters);
@@ -151,24 +138,25 @@ namespace Nogupe.Web.Data
                 .WithOne(c => c.Course);
 
             modelBuilder.Entity<Course>()
-                .HasOne(e => e.Wall)
-                .WithOne(c => c.Course)
-                .HasForeignKey<Wall>(a => a.CourseId);
+                .HasMany(e => e.Inscriptions)
+                .WithOne(c => c.Course);
 
-            #endregion
+            modelBuilder.Entity<Course>()
+                .HasMany(e => e.Assistances)
+                .WithOne(c => c.Course);
 
-            #region Wall
-
-            modelBuilder.Entity<Wall>().HasKey(u => u.Id);
-
-            //modelBuilder.Entity<Wall>()
-            //    .HasOne(e => e.Course)
-            //    .WithOne(c => c.Wall)
-            //    .HasForeignKey<Course>(e => e.WallId);
-
-            modelBuilder.Entity<Wall>()
+            modelBuilder.Entity<Course>()
                 .HasMany(e => e.Comments)
-                .WithOne(c => c.Wall);
+                .WithOne(c => c.Course);
+
+            modelBuilder.Entity<Course>()
+                .HasMany(e => e.Files)
+                .WithOne(c => c.Course);
+
+            //modelBuilder.Entity<Course>()
+            //    .HasOne(e => e.Wall)
+            //    .WithOne(c => c.Course)
+            //    .HasForeignKey<Wall>(a => a.CourseId);
 
             #endregion
 
@@ -255,19 +243,59 @@ namespace Nogupe.Web.Data
 
             #endregion
 
+            #region Files
+
+            modelBuilder.Entity<File>().HasKey(u => u.Id);
+            modelBuilder.Entity<File>().Property(u => u.Name).HasMaxLength(255).IsRequired();
+            modelBuilder.Entity<File>().Property(u => u.DirName).HasMaxLength(260).IsRequired();
+            modelBuilder.Entity<File>().HasIndex(u => u.UIdFileName).IsUnique();
+
+            modelBuilder.Entity<File>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Files);
+
+            #endregion Files
+
+            #region Comments
+
+            modelBuilder.Entity<Comment>().HasKey(u => u.Id);
+            modelBuilder.Entity<Comment>().Property(u => u.Commentary).HasMaxLength(255);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Comments);
+
+            #endregion
+
+
+            #region Wall
+
+            //modelBuilder.Entity<Wall>().HasKey(u => u.Id);
+
+            //modelBuilder.Entity<Wall>()
+            //    .HasOne(e => e.Course)
+            //    .WithOne(c => c.Wall)
+            //    .HasForeignKey<Course>(e => e.WallId);
+
+            //modelBuilder.Entity<Wall>()
+            //    .HasMany(e => e.Comments)
+            //    .WithOne(c => c.Wall);
+
+            #endregion
+
             #region Document
 
-            modelBuilder.Entity<WallFile>().ToTable("Documents").HasKey(u => u.Id);
+            //modelBuilder.Entity<WallFile>().ToTable("Documents").HasKey(u => u.Id);
 
-            modelBuilder.Entity<WallFile>()
-                .HasOne(e => e.Wall)
-                .WithMany(e => e.Documents)
-                .HasForeignKey(e => e.WallId);
+            //modelBuilder.Entity<WallFile>()
+            //    .HasOne(e => e.Wall)
+            //    .WithMany(e => e.Documents)
+            //    .HasForeignKey(e => e.WallId);
 
-            modelBuilder.Entity<WallFile>()
-                .HasOne(e => e.File)
-                .WithMany()
-                .HasForeignKey(e => e.FileId);
+            //modelBuilder.Entity<WallFile>()
+            //    .HasOne(e => e.File)
+            //    .WithMany()
+            //    .HasForeignKey(e => e.FileId);
 
             #endregion
 

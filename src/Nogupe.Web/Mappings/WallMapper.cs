@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Services.Walls.DTOs;
+using Nogupe.Web.ViewModels.Comment;
 using Nogupe.Web.ViewModels.Wall;
 using System;
 using System.Collections.Generic;

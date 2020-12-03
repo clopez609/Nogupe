@@ -19,26 +19,35 @@ namespace Nogupe.Web.Mappings
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<RatingListViewModel, Rating>();
+                cfg.CreateMap<RatingViewModel, Rating>();
 
-                cfg.CreateMap<RatingListDTO, RatingListViewModel>();
+                cfg.CreateMap<RatingListDTO, RatingViewModel>();
 
-                cfg.CreateMap(typeof(PagedListResult<RatingListDTO>), typeof(PagedListResultViewModel<RatingListViewModel>));
+                cfg.CreateMap<IEnumerable<Rating>, IEnumerable<RatingViewModel>>();
+
+                cfg.CreateMap<Rating, RatingViewModel>()
+                    .ForMember(dst => dst.Username, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+
+                cfg.CreateMap(typeof(PagedListResult<RatingListDTO>), typeof(PagedListResultViewModel<RatingViewModel>));
             });
 
             Mapper = config.CreateMapper();
         }
 
-        public static Rating ToEntityModel(this RatingListViewModel ratingListViewModel, Rating rating)
+        public static Rating ToEntityModel(this RatingViewModel ratingListViewModel, Rating rating)
         {
             return Mapper.Map(ratingListViewModel, rating);
         }
 
+        public static IEnumerable<RatingViewModel> ToViewModel(this IEnumerable<Rating> ratings)
+        {
+            return Mapper.Map<IEnumerable<RatingViewModel>>(ratings);
+        }
 
-        public static PagedListResultViewModel<RatingListViewModel> ToViewModel(
+        public static PagedListResultViewModel<RatingViewModel> ToViewModel(
             this PagedListResult<RatingListDTO> ratings)
         {
-            return Mapper.Map<PagedListResultViewModel<RatingListViewModel>>(ratings);
+            return Mapper.Map<PagedListResultViewModel<RatingViewModel>>(ratings);
         }
     }
 }

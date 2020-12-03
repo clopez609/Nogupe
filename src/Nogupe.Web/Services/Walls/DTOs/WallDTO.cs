@@ -1,4 +1,5 @@
 ﻿using Nogupe.Web.Entities.Courses;
+using Nogupe.Web.Services.Ratings.DTOs;
 using System.Collections.Generic;
 
 namespace Nogupe.Web.Services.Walls.DTOs

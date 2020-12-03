@@ -105,16 +105,14 @@ namespace Nogupe.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(model);
+                return View(model);
             }
 
             var course = new Course();
             model.ToEntityModel(course);
-
             _courseService.Create(course);
-            _wallService.CreateWall(course);
 
-            return RedirectToAction(nameof(Index), model.Id);
+            return View(nameof(Index));
         }
 
         [HttpGet]
@@ -139,13 +137,13 @@ namespace Nogupe.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(model);
+                return View(model);
             }
 
             model.ToEntityModel(course);
             _courseService.Update(course);
 
-            return RedirectToAction(nameof(Index), model.Id);
+            return View(nameof(Index));
         }
 
         [HttpDelete]
@@ -153,9 +151,12 @@ namespace Nogupe.Web.Controllers
         {
             var course = _courseService.GetById(id);
 
-            if (course == null) return BadRequest();
+            if (course == null) 
+            {
+                //ModelState.AddModelError(" ", "Error al intentar borrar el registro");
+                return BadRequest();
+            };
 
-            _wallService.DeleteWall(course);
             _courseService.Delete(course);
 
             return Ok();

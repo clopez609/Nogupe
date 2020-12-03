@@ -20,13 +20,14 @@ namespace Nogupe.Web.Entities.Courses
         public User User { get; set; }
         public Weekday Weekday { get; set; }
         public Matter Matter { get; set; }
-        public Wall Wall { get; set; }
         public Career Career { get; set; }
 
         public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<Token> Tokens { get; set; }
         public virtual ICollection<Inscription> Inscriptions { get; set; }
         public virtual ICollection<Assistance> Assistances { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<File> Files { get; set; }
 
     }
 }

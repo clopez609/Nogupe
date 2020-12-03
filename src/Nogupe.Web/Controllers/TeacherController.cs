@@ -51,10 +51,10 @@ namespace Nogupe.Web.Controllers
             return View(result);
         }
 
-        [HttpPost]
-        public IActionResult RatingList(int id, RatingListViewModel model)
+        [HttpPut]
+        public IActionResult RatingList(int id, RatingViewModel model)
         {
-            var rating = _ratingService.GetById(id);
+            var rating = _ratingService.GetAll().Where(x => x.CourseId == id).FirstOrDefault(); 
 
             if (rating == null) return BadRequest();
 
@@ -62,7 +62,7 @@ namespace Nogupe.Web.Controllers
             {
                 model.ToEntityModel(rating);
                 _ratingService.Update(rating);
-                return Ok(model.Id);
+                return View();
             }
 
             return BadRequest();
