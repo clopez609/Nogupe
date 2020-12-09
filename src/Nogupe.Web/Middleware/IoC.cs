@@ -6,6 +6,7 @@ using Nogupe.Web.Services.Files;
 using Nogupe.Web.Services.Matters;
 using Nogupe.Web.Services.Ratings;
 using Nogupe.Web.Services.RoleTypes;
+using Nogupe.Web.Services.Tokens;
 using Nogupe.Web.Services.Users;
 using Nogupe.Web.Services.Walls;
 using Nogupe.Web.Services.Weekdays;
@@ -31,6 +32,7 @@ namespace Nogupe.Web.Middleware
             services.AddTransient<IRatingService, RatingService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IWallFileService, WallFileService>();
+            services.AddTransient<ITokenService, TokenService>();
 
             return services;
         }

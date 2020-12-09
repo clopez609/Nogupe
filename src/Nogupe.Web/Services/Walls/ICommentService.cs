@@ -8,6 +8,6 @@ namespace Nogupe.Web.Services.Walls
 {
     public interface ICommentService : IRepository<Comment>
     {
-        Comment Create(CommentDetailDTO commentDetailDTO, UserViewModel userViewModel);
+
     }
 }

@@ -2,9 +2,14 @@
 using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Services.Courses.DTOs;
+using Nogupe.Web.Services.Ratings.DTOs;
+using Nogupe.Web.Services.Walls.DTOs;
 using Nogupe.Web.ViewModels;
+using Nogupe.Web.ViewModels.Comment;
 using Nogupe.Web.ViewModels.Course;
 using Nogupe.Web.ViewModels.File;
+using Nogupe.Web.ViewModels.Inscription;
+using Nogupe.Web.ViewModels.Rating;
 using System.IO;
 
 namespace Nogupe.Web.Mappings
@@ -25,6 +30,12 @@ namespace Nogupe.Web.Mappings
 
                 cfg.CreateMap<CourseDTO, CourseDetailViewModel>()
                     .ForMember(dest => dest.Files, opt => opt.Ignore());
+
+                cfg.CreateMap<CommentDTO, CommentViewModel>();
+
+                cfg.CreateMap<InscriptionDTO, InscriptionViewModel>();
+
+                cfg.CreateMap<RatingDTO, RatingViewModel>();
 
                 cfg.CreateMap(typeof(PagedListResult<CourseListDTO>), typeof(PagedListResultViewModel<CourseListViewModel>));
             });

@@ -52,9 +52,9 @@ namespace Nogupe.Web.Services.Courses
             var course = _context.Set<Course>()
                    .Include(x => x.Assistances)
                    .Include(x => x.Inscriptions)
-                   .Include(x => x.Ratings)
+                   .Include(x => x.Ratings).ThenInclude(e => e.User)
                    .Include(x => x.Files)
-                   .Include(x => x.Comments)
+                   .Include(x => x.Comments).ThenInclude(e => e.User)
                    .Include(x => x.Tokens)
                    .FirstOrDefault(x => x.Id == id);
 

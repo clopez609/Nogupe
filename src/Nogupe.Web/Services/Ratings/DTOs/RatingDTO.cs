@@ -8,6 +8,7 @@ namespace Nogupe.Web.Services.Ratings.DTOs
     public class RatingDTO
     {
         public int? Id { get; set; }
+        public int? CourseId { get; set; }
         public string UserName { get; set; }
         public int? OnePartial { get; set; }
         public int? TwoPartial { get; set; }

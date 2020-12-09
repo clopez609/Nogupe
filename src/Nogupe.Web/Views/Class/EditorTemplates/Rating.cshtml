@@ -1,0 +1,40 @@
+﻿@model RatingViewModel
+
+<div class="row">
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.CourseId)
+
+    <div class="col-md">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Username, "Nombre")
+            @Html.TextBoxFor(model => model.Username, new { @class = "form-control", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="form-group">
+            @Html.LabelFor(model => model.OnePartial, "1° Nota")
+            @(Model.OnePartial.Value == 0? @Html.TextBoxFor(model => model.OnePartial, "{0:#.#}", new { @class = "form-control" }) : @Html.TextBoxFor(model => model.OnePartial, "{0:#.#}", new { @class = "form-control", disabled = "disabled" }))
+            @Html.ValidationMessageFor(model => model.OnePartial, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="form-group">
+            @Html.LabelFor(model => model.TwoPartial, "2° Nota")
+            @(Model.TwoPartial.Value == 0? @Html.TextBoxFor(model => model.TwoPartial, "{0:#.#}", new { @class = "form-control" }) : @Html.TextBoxFor(model => model.TwoPartial, "{0:#.#}", new { @class = "form-control", disabled = "disabled" }))
+            @Html.ValidationMessageFor(model => model.TwoPartial, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="form-group">
+            @Html.LabelFor(model => model.FinalNote, "Nota Final")
+            @(Model.FinalNote.Value == 0? @Html.TextBoxFor(model => model.FinalNote, "{0:#.#}", new { @class = "form-control" }) : @Html.TextBoxFor(model => model.FinalNote, "{0:#.#}", new { @class = "form-control", disabled = "disabled" }))
+            @Html.ValidationMessageFor(model => model.FinalNote, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md">
+        @if (Model.FinalNote.Value == 0)
+        {
+            <button type="submit" class="btn btn-success mt-4">Cargar</button>
+        }
+    </div>
+</div>

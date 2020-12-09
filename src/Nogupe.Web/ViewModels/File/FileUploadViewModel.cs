@@ -5,7 +5,7 @@ namespace Nogupe.Web.ViewModels.File
 {
     public class FileUploadViewModel
     {
-        public int? WallId { get; set; }
+        public int CourseId { get; set; }
 
         [Required(ErrorMessage = "Debe cargar algun archivo")]
         public IFormFile File { get; set; }

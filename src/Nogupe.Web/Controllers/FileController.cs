@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Nogupe.Web.Entities.Courses;
-using Nogupe.Web.Mappings;
 using Nogupe.Web.Services.Files;
-using Nogupe.Web.Services.Walls;
 using Nogupe.Web.ViewModels.File;
-using Nogupe.Web.ViewModels.Wall;
 using System;
 using System.IO;
 using System.Linq;
@@ -18,29 +14,25 @@ namespace Nogupe.Web.Controllers
     {
         private readonly IWebHostEnvironment _env;
         private readonly IFileService _fileService;
-        private readonly IWallFileService _wallFileService;
 
-        public FileController(IWebHostEnvironment env, IFileService fileService, IWallFileService wallFileService)
+        public FileController(IWebHostEnvironment env, IFileService fileService)
         {
             _env = env;
             _fileService = fileService;
-            _wallFileService = wallFileService;
         }
 
         [HttpPost]
         public async Task<IActionResult> UploadFile(FileUploadViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.Values.SelectMany(v => v.Errors));
-            };
-
-            var entity = new WallFile();
-
             if (model.File == null || model.File.Length == 0)
             {
                 return BadRequest();
             }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            };
 
             var guId = GetFileName();
             var targetFile = GetTargetFile(guId);
@@ -53,6 +45,7 @@ namespace Nogupe.Web.Controllers
 
             var file = new Entities.File
             {
+                CourseId = model.CourseId,
                 Name = model.File.FileName,
                 DirName = "${uploadPath}",
                 UIdFileName = guId
@@ -60,26 +53,7 @@ namespace Nogupe.Web.Controllers
 
             _fileService.Create(file);
 
-            var wallFileViewModel = new WallFileViewModel
-            {
-                FileId = file.Id,
-                WallId = model.WallId,
-                FileName = file.Name,
-                UIdFileName = file.UIdFileName,
-                FileUrl = targetFile
-            };
-
-            wallFileViewModel.ToEntityModel(entity);
-            _wallFileService.Create(entity);
-
-            var response = new
-            {
-                wallFileViewModel.Id,
-                wallFileViewModel.FileName,
-                wallFileViewModel.UIdFileName
-            };
-
-            return Ok(response);
+            return Ok(file);
         }
 
         public IActionResult DownloadFile(string UIdFileName)

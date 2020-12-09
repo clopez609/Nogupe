@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Nogupe.Web.Services.Walls.DTOs;
+using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.ViewModels.Wall;
+using System;
 
 namespace Nogupe.Web.Mappings
 {
@@ -12,18 +13,19 @@ namespace Nogupe.Web.Mappings
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<CommentDetailViewModel, CommentDetailDTO>();
-
-                cfg.CreateMap<CommentDetailDTO, CommentDetailViewModel>();
+                cfg.CreateMap<CommentDetailViewModel, Comment>();
             });
 
             Mapper = config.CreateMapper();
         }
 
-        public static CommentDetailDTO ToDTO(this CommentDetailViewModel commentViewModel)
+        public static Comment ToEntityModel(this CommentDetailViewModel commentDetailViewModel, Comment comment, int userId)
         {
-            var commentDTO = Mapper.Map<CommentDetailDTO>(commentViewModel);
-            return commentDTO;
+            var entity = Mapper.Map(commentDetailViewModel, comment);
+            entity.CreatedDate = DateTime.Now;
+            entity.UserId = userId;
+
+            return comment;
         }
     }
 }

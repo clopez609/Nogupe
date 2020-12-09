@@ -23,6 +23,7 @@ namespace Nogupe.Web.ViewModels.Course
         public ICollection<RatingViewModel> Ratings { get; set; }
         public ICollection<CommentViewModel> Comments { get; set; }
         public ICollection<FileViewModel> Files { get; set; }
+
         //public ICollection<InscriptionDTO> Inscriptions { get; set; }
         //public ICollection<TokenDTO> Tokens { get; set; }
         //public ICollection<AssistanceDTO> Assistances { get; set; }

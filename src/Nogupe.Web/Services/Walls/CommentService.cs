@@ -24,24 +24,10 @@ namespace Nogupe.Web.Services.Walls
 
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Comment, CommentDetailDTO>();
 
-                cfg.CreateMap<CommentDetailDTO, Comment>();
             });
 
             _mapper = config.CreateMapper();
-        }
-
-        public Comment Create(CommentDetailDTO commentDetailDTO, UserViewModel userViewModel)
-        {
-            var comment = _mapper.Map<Comment>(commentDetailDTO);
-
-            comment.CreatedDate = DateTime.Now;
-            comment.UserId = userViewModel.Id;
-
-            Create(comment);
-
-            return comment;
         }
     }
 }

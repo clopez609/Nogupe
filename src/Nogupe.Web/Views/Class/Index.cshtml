@@ -21,26 +21,11 @@
                     <h6 class="text-white">Muro</h6>
                 </div>
                 <div class="card-body" style="height:400px; overflow:auto">
+
                     @if (Model.Comments.Count() <= 0)
                     {
                         <h5 class="text-center">¡Todavia no hay mensajes!</h5>
                     }
-
-                    @*<div class="comments-list">
-                        @foreach (var item in Model.Comments)
-                        {
-                            <div class="media mb-3" style="border-bottom: 1px dotted #ccc">
-                                <img class="mr-3 mb-1" src="~/images/user.png" alt="user_image" width="46" height="46">
-                                <div class="media-body">
-                                    <a class="d-flex w-100 justify-content-between">
-                                        <h5 class="mt-0">@item.Username </h5>
-                                        <p class="float-right"><small> @item.Date </small></p>
-                                    </a>
-                                    @item.Commentary
-                                </div>
-                            </div>
-                        }
-                        </div>*@
 
                     <div class="comments-list">
                         @foreach (var msj in Model.Comments)
@@ -59,16 +44,19 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <textarea class="form-control comment-text" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary" onclick="postComment(@Model.Id)">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
+                            <form data-ajax="true" data-ajax-success="PostSuccess" data-ajax-failure="PostFailure" asp-action="CreateComment" asp-controller="Class">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="hidden" name="CourseId" value="@Model.Id" />
+                                        <textarea class="form-control" id="Commentary" name="Commentary" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-secondary">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -102,8 +90,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <form enctype="multipart/form-data" data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" asp-controller="File" asp-action="UploadFile">
-                        <input hidden name="WallId" value="@Model.Id" />
+                    <form enctype="multipart/form-data" data-ajax="true" data-ajax-success="UploadFileSuccess" data-ajax-failure="UploadFileFailure" asp-controller="File" asp-action="UploadFile">
+                        <input hidden name="CourseId" value="@Model.Id" />
                         <div class="custom-file">
                             <input type="file" name="File" class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">Seleccioné archivo</label>
@@ -120,10 +108,8 @@ else if (role == 3)
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <h6 class="text-center"><i class="fas fa-align-justify mr-1"></i>Muro</h6>
-                    <button type="button" class="btn btn-primary" onclick="openModalMyRating()">Mis notas</button>
-                    <button type="button" class="btn btn-primary" onclick="openModalMyAssintance()">Dar asistencia</button>
+                <div class="card-header" style="background-color:cadetblue">
+                    <h6 class="text-white">Muro</h6>
                 </div>
                 <div class="card-body" style="height:400px; overflow:auto">
                     @if (Model.Comments.Count() <= 0)
@@ -146,10 +132,11 @@ else if (role == 3)
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12">
-                            <form  data-ajax="true" data-ajax-success="Success" data-ajax-failure="Failure" asp-action="PostComment" asp-controller="Class" asp-route-id="@Model.Id">
+                            <form data-ajax="true" data-ajax-success="PostSuccess" data-ajax-failure="PostFailure" asp-action="CreateComment" asp-controller="Class">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <textarea class="form-control comment-text" name="Commentary" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                        <input type="hidden" name="CourseId" value="@Model.Id" />
+                                        <textarea class="form-control" id="Commentary" name="Commentary" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-secondary">
                                                 <i class="fas fa-paper-plane"></i>
@@ -164,70 +151,93 @@ else if (role == 3)
             </div>
         </div>
     </div>
+
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="background-color:cadetblue">
+                    <h6 class="text-white">Archivos</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Files.Count() <= 0)
+                    {
+                        <h5 class="text-center">¡No hay archivos cargados!</h5>
+                    }
+                    <div class="files-list">
+                        <ul class="list-group" id="fileList">
+                            @foreach (var file in Model.Files)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center hidden-sm-down">
+                                    @file.FileName
+                                    <a asp-action="DownloadFile" asp-controller="File" asp-route-UIdFileName="@file.UIdFileName">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 
 
-<!-- Modal Asistencias -->
-<!--<div class="modal fade" id="assistanceModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<!-- Modal Token -->
+<div class="modal fade" id="tokenModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="text-center">Asistencia</h5>
+                <h5 class="text-center">Generar Token de Asistencía</h5>
                 <a href="#" class="close" data-dismiss="modal">&times;</a>
             </div>
-            <div class="modal-body assistance-content">
-                <form method="post" id="formToken" asp-action="Assistance" asp-controller="Courses">
+            <div class="modal-body">
+                <form data-ajax="true" data-ajax-success="TokenSuccess" data-ajax-failure="TokenFailure" asp-action="CreateToken" asp-controller="Class">
+
+                    <input type="hidden" name="CourseId" value="@Model.Id" />
+
                     <div class="form-group">
-                        @Html.Label("Codigo Token")
-                        @Html.TextBox("Token", "", new { @class = "form-control" })
+                        <label for="Code">Token</label>
+                        <input type="number" name="Code" id="TBoxCode" class="form-control" maxlength="6" minLength="3" required />
                     </div>
+
+                    <div class="form-group">
+                        <label for="Duration">Seleccione duración</label>
+                        <select name="Duration" id="CBoxDuration" class="form-control" required>
+                            <option value="">Seleccioné...</option>
+                            <option value="15">15 Segundos</option>
+                            <option value="30">30 Segundos</option>
+                            <option value="60">60 Segundos</option>
+                            <option value="120">120 Segundos</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Generar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" onclick="assistanceToken()">Dar asistencia</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
-</div>-->
+</div>
 
 <!-- Modal Calificaciones -->
 <div class="modal fade" id="ratingStudents" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Listado de Notas</h5>
                 <a href="#" class="close" data-dismiss="modal">&times;</a>
             </div>
             <div class="modal-body">
-                <table class="table" id="table-form">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Nota 1º</th>
-                            <th>Nota 2º</th>
-                            <th>Nota Final</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model.Ratings)
-                        {
-                            <tr>
-                                <td> 
-                                    <input type="hidden" id="alumnoId" value="@user.Id" />
-                                    @user.Username 
-                                </td>
-                                <td><input type="number" min="0" max="10" id="nota1" required></td>
-                                <td><input type="number" min="0" max="10" id="nota2" required></td>
-                                <td><input type="number" min="0" max="10" id="nota3" required></td>
-                                <td><button type="submit" class="btn btn-success" onclick="LoadRating()">Cargar</button></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @foreach (var item in Model.Ratings)
+                {
+                    <form data-ajax="true" data-ajax-success="RatingSuccess" data-ajax-failure="RatingFailure" asp-action="UpdateRating" asp-controller="Class">
+                        <partial name="EditorTemplates/Rating" model="item" />
+                    </form>
+                }
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
@@ -237,116 +247,123 @@ else if (role == 3)
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
-        function openModalRating() {
-            $('#ratingStudents').modal('show');
-        };
+    <script>
 
-        function LoadRating() {
-            var id = $('#alumnoId').val();
-            var nota1 = $('#nota1').val();
-            var nota2 = $('#nota2').val();
-            var nota3 = $('#nota3').val();
+    function openModalRating() {
+        $('#ratingStudents').modal('show');
+    };
 
-            var formData = {
-                Id: id,
-                OnePartial: nota1,
-                TwoPartial: nota2,
-                FinalNote: nota3
-            };
+    function openModalToken() {
+        $('#tokenModal').modal('show');
+    };
 
-            $.ajax({
-                type: 'Put',
-                url: "@Url.Action("UpdateRating", "Class")",
-                data: formData,
-                success: function (res) {
-                    console.log(res);
-                },
-                error: function (xhr, status) {
-                    alert('Disculpe, existió un problema');
-                }
-            });
-        };
-
-        function Success(xhr) {
-            console.log(xhr)
-            var data = xhr;
-            var files = $("#fileList");
-            files.append('<li class="list-group-item d-flex justify-content-between align-items-center hidden-sm-down">' + data.fileName + '<a href="/File/DownloadFile?UIdFileName=' + data.uIdFileName + '">' + '<i class="fas fa-download"></i ></a></li>');
-        };
-
-        function Failure(xhr) {
-            $.toast({
-                text: `Error: Debe cargar algun archivo`,
-                hideAfter: 3000,
-                allowToastClose: true,
-                showHideTransition: 'fade',
-                position: 'bottom-center',
-                icon: 'error'
-            });
-        };
-
-
-        $(document).ready(function () {
-            //setInterval(updateCommentsList, 3000);
-            $.ajaxSetup({ cache: false });
-
-            // nombre de archivo subido
-            $(".custom-file-input").on("change", function () {
-                var fileName = $(this).val().split("\\").pop();
-                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-            });
-
+    function TokenSuccess(xhr) {
+        $('#tokenModal').modal('hide');
+        $.toast({
+            text: 'Se ha generado token',
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'success'
         });
-       
-        //function openModalMyAssintance() {
-        //    $('#assistanceModal').modal('show');
-        //};
+        $('#TBoxCode').val('')
+        $('#CBoxDuration').val('')
+    };
 
-        function updateCommentsList() {
-            var location = window.location.pathname;
-            var courseId = parseInt(location.substring(location.length - 1));
+    function TokenFailure(xhr) {
+        $('#tokenModal').modal('hide');
+        $.toast({
+            text: `Error: Revise los campos cargados`,
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'error'
+        });
+    };
 
-            $.ajax({
-                type: 'Get',
-                url: "@Url.Action("Comments", "Class")",
-                data: { id: courseId },
-                success: function (res) {
-                    var lista = $('.comments-list');
-                    lista.empty();
-                    $.each(res.comments, function (e, i) {
-                        var hourFormat = moment(new Date(i.date)).format("MM/DD/YYYY h:mm:ss A");
-                        lista.append('<a class="list-group-item flex-column align-items-start"> <div class="d-flex w-100 justify-content-between"> <h6 class="mb-1">' + i.username + '</h6> <small class="text-muted"> ' + hourFormat + ' </small> </div><p class="mb-1">' + i.commentary + '</p></a>');
-                    });
-                }
-            });
-        }
 
-        function postComment(id) {
-            var mensaje = $(".comment-text");
-            var comentarios = $(".comments-list");
-            var url = "@Url.Action("PostComment", "Class")"
+    function RatingSuccess(xhr) {
+        $('#ratingStudents').modal('hide');
+    };
 
-            var model = {
-                WallId : id,
-                Commentary: mensaje.val(),
-            };
+    function RatingFailure(xhr) {
+        $('#ratingStudents').modal('hide');
+        $.toast({
+            text: `Error: Revise los campos cargados`,
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'error'
+        });
+    };
 
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: model,
-                success: function (res) {
-                    var hora = moment(new Date(res.date)).format("MM/DD/YYYY h:mm:ss A");
-                    comentarios.append('<a class="list-group-item flex-column align-items-start" id="message_' + res.id + '"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1">' + res.userName + '</h6><small class="text-muted">' + hora + '</small></div><p class="mb-1">' + res.commentary + '</p></a>');
-                    mensaje.val("");
-                    updateCommentsList();
-                },
-                error: function (xhr, status) {
-                    alert('Disculpe, existió un problema');
-                }
-            });
-        }
+    function UploadFileSuccess(xhr) {
+        var data = xhr;
+        var files = $("#fileList");
+        $("#customFile").val("");
+        files.append('<li class="list-group-item d-flex justify-content-between align-items-center hidden-sm-down">' + data.name + '<a href="/File/DownloadFile?UIdFileName=' + data.uIdFileName + '">' + '<i class="fas fa-download"></i ></a></li>');
+    };
 
-</script>
+    function UploadFileFailure(xhr) {
+        $.toast({
+            text: `Error: Debe cargar algun archivo`,
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'error'
+        });
+    };
+
+
+    $(document).ready(function () {
+        //setInterval(updateCommentsList, 3000);
+        $.ajaxSetup({ cache: false });
+
+        // nombre de archivo subido
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+    });
+
+    function UpdateComments(id) {
+        $.ajax({
+            type: 'Get',
+            url: "@Url.Action("Comments", "Class")",
+            data: { id: id },
+            success: function (res) {
+                var lista = $('.comments-list');
+                lista.empty();
+                $.each(res.comments, function (e, i) {
+                    var hourFormat = moment(new Date(i.createdDate)).format("MM/DD/YYYY h:mm:ss A");
+                    lista.append('<a class="list-group-item flex-column align-items-start"> <div class="d-flex w-100 justify-content-between"> <h6 class="mb-1">' + i.username + '</h6> <small class="text-muted"> ' + hourFormat + ' </small> </div><p class="mb-1">' + i.commentary + '</p></a>');
+                });
+            }
+        });
+    }
+
+    function PostSuccess(xhr) {
+        $('#Commentary').val("");
+        var hora = moment(new Date(xhr.createdDate)).format("MM/DD/YYYY h:mm:ss A");
+        $(".comments-list").append('<a class="list-group-item flex-column align-items-start" id="message_' + xhr.id + '"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1">' + (xhr.userName == undefined ? '' : xhr.userName) + '</h6><small class="text-muted">' + hora + '</small></div><p class="mb-1">' + xhr.commentary + '</p></a>');
+        UpdateComments(xhr.courseId);
+    };
+
+    function PostFailure(xhr) {
+        $.toast({
+            text: `Error: no se pudo publicar comentario, intente nuevamente`,
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'error'
+        });
+    };
+
+    </script>
 }

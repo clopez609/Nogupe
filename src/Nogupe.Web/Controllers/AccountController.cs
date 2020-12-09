@@ -159,9 +159,11 @@ namespace Nogupe.Web.Controllers
                     };
                     _userService.UpdateUser(user);
 
-                    HttpContext.Session.SetInt32("_Id", user.Id);
-                    HttpContext.Session.SetString("_User", user.UserName);
-                    HttpContext.Session.SetInt32("_Role", user.RoleId);
+                    var userResult = result.User;
+
+                    HttpContext.Session.SetInt32("_Id", userResult.Id);
+                    HttpContext.Session.SetString("_User", userResult.UserName);
+                    HttpContext.Session.SetInt32("_Role", userResult.RoleId);
 
                     return Redirect("/Home/Index");
                 }
