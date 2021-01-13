@@ -28,6 +28,8 @@ namespace Nogupe.Web.Mappings
                 cfg.CreateMap<Rating, RatingViewModel>()
                     .ForMember(dst => dst.Username, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
 
+                cfg.CreateMap<Rating, RatingDetailViewModel>();
+
                 cfg.CreateMap(typeof(PagedListResult<RatingListDTO>), typeof(PagedListResultViewModel<RatingViewModel>));
             });
 
@@ -42,6 +44,18 @@ namespace Nogupe.Web.Mappings
         public static IEnumerable<RatingViewModel> ToViewModel(this IEnumerable<Rating> ratings)
         {
             return Mapper.Map<IEnumerable<RatingViewModel>>(ratings);
+        }
+
+        public static RatingDetailViewModel ToDetailViewModel(this Rating rating)
+        {
+            var ratingViewModel = Mapper.Map<RatingDetailViewModel>(rating);
+
+            ratingViewModel.Status = rating.Status.ToString() == "Regular" 
+                ? "Regular": rating.Status.ToString() == "Postponed" 
+                ? "Aplazado" : rating.Status.ToString() == "Promotion" 
+                ? "Promociona" : "Sin notas" ;
+
+            return ratingViewModel;
         }
 
         public static PagedListResultViewModel<RatingViewModel> ToViewModel(

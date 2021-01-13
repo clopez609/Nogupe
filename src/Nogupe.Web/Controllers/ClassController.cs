@@ -1,40 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nogupe.Web.Entities.Courses;
 using Nogupe.Web.Mappings;
+using Nogupe.Web.Services.Assistances;
 using Nogupe.Web.Services.Courses;
 using Nogupe.Web.Services.Ratings;
 using Nogupe.Web.Services.Tokens;
-using Nogupe.Web.Services.Users;
 using Nogupe.Web.Services.Walls;
-using Nogupe.Web.Services.Walls.DTOs;
 using Nogupe.Web.ViewModels.Rating;
 using Nogupe.Web.ViewModels.Token;
 using Nogupe.Web.ViewModels.Wall;
+using System;
+using System.Linq;
 
 namespace Nogupe.Web.Controllers
 {
-    public class ClassController : Controller
+    public partial class ClassController : Controller
     {
-        private readonly IWallService _wallService;
         private readonly ICourseService _courseService;
         private readonly ICommentService _commentService;
-        private readonly IUserService _userService;
         private readonly IRatingService _ratingService;
         private readonly ITokenService _tokenService;
+        private readonly IAssistanceService _assistanceService;
 
-        public ClassController(IWallService wallService, ICourseService courseService, IUserService userService, ICommentService commentService, IRatingService ratingService, ITokenService tokenService)
+        public ClassController(ICourseService courseService, ICommentService commentService, IRatingService ratingService, ITokenService tokenService, IAssistanceService assistanceService)
         {
-            _wallService = wallService;
             _courseService = courseService;
-            _userService = userService;
             _commentService = commentService;
             _ratingService = ratingService;
             _tokenService = tokenService;
+            _assistanceService = assistanceService;
         }
 
         [HttpGet]
@@ -95,6 +90,36 @@ namespace Nogupe.Web.Controllers
                 _tokenService.Create(token);
 
                 return Ok(token);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public IActionResult DetailToken(TokenDetailViewModel model)
+        {
+            var currentUserId = HttpContext.Session.GetInt32("_Id").Value;
+            var currentDateTime = DateTime.Now;
+
+            var token = _tokenService.GetAll().Where(x => x.Code == model.Code && x.CreatedDate > currentDateTime).FirstOrDefault();
+            if (token == null) return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                if (token.CreatedDate >= currentDateTime)
+                {
+                    var assistance = new Assistance()
+                    {
+                        CourseId = model.CourseId,
+                        Today = currentDateTime,
+                        UserId = currentUserId,
+                        Status = true
+                    };
+
+                    _assistanceService.Create(assistance);
+                    return Ok(assistance);
+                }
+                return BadRequest();
             }
 
             return BadRequest();

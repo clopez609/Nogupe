@@ -6,6 +6,7 @@
 
 @{
     var role = Context.Session.GetInt32("_Role");
+    var currentUser = Context.Session.GetInt32("_Id");
 }
 
 @if (role == 2)
@@ -107,6 +108,10 @@ else if (role == 3)
 {
     <div class="row">
         <div class="col-md-12">
+            <div class="mb-1">
+                <button type="button" class="btn btn-primary" onclick="openModalMyRating(@Model.Id)">Mis Notas</button>
+                <button type="button" class="btn btn-primary" onclick="openModalLoadToken()">Cargar Asistencia</button>
+            </div>
             <div class="card">
                 <div class="card-header" style="background-color:cadetblue">
                     <h6 class="text-white">Muro</h6>
@@ -221,6 +226,32 @@ else if (role == 3)
     </div>
 </div>
 
+<!-- Modal Token Alumno -->
+<div class="modal fade" id="loadTokenModal" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="text-center">Asistencia</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <form data-ajax="true" data-ajax-success="LoadTokenSuccess" data-ajax-failure="LoadTokenFailure" asp-action="DetailToken" asp-controller="Class">
+
+                    <input type="hidden" name="CourseId" value="@Model.Id" />
+
+                    <div class="form-group">
+                        <label for="Code">Token</label>
+                        <input type="number" name="Code" id="TBoxLoadCode" class="form-control" maxlength="6" minLength="3" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Dar Asistencia</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Calificaciones -->
 <div class="modal fade" id="ratingStudents" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -245,16 +276,96 @@ else if (role == 3)
     </div>
 </div>
 
+<!-- Modal Calificaciones Alumno -->
+<div class="modal fade" id="myRating" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mis Notas</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                @{
+                    if (role == 3)
+                    {
+                        var user = Model.Ratings.Where(x => x.UserId == currentUser.Value).SingleOrDefault();
+
+                        string rating;
+
+                        if (user == null)
+                        {
+                            <h5 class="text-center">¡No hay notas cargados!</h5>
+                        }
+
+                        if (user != null && user.FinalNote > 7)
+                        {
+                            rating = "Promoción";
+                        }
+                        else if (user != null && user.FinalNote > 4 && user.FinalNote < 7)
+                        {
+                            rating = "Regular";
+                        }
+                        else
+                        {
+                            rating = "Aplazado";
+                        }
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nota 1°</th>
+                                    <th scope="col">Nota 2°</th>
+                                    <th scope="col">Nota Final</th>
+                                    <th scope="col">Situacion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> @user.OnePartial </td>
+                                    <td> @user.TwoPartial </td>
+                                    <td> @user.FinalNote </td>
+                                    <td> @rating </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+<script>
 
     function openModalRating() {
         $('#ratingStudents').modal('show');
     };
 
+    function openModalMyRating(courseId) {
+        @*$.ajax({
+            type: 'Get',
+            url: "@Url.Action("MyRating", "Class")",
+            data: { id: courseId },
+            success: function (res) {
+                var contentBody = $('.my-rating-content');
+                contentBody.append('<table class="table table-striped"><thead><tr><th scope="col">Nota 1°</th><th scope="col">Nota 2°</th><th scope="col">Nota Final</th><th scope="col">Estado</th></thead><tbody><tr><td>' + res.onePartial + '</td><td>' + res.twoPartial + '</td><td>' + res.finalNote + '</td><td>' + res.status +'</td></tr></tbody>')
+            }
+        });*@
+        $('#myRating').modal('show');
+    };
+
     function openModalToken() {
         $('#tokenModal').modal('show');
+    };
+
+    function openModalLoadToken() {
+        $('#loadTokenModal').modal('show');
     };
 
     function TokenSuccess(xhr) {
@@ -275,6 +386,31 @@ else if (role == 3)
         $('#tokenModal').modal('hide');
         $.toast({
             text: `Error: Revise los campos cargados`,
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'error'
+        });
+        };
+
+    function LoadTokenSuccess(xhr) {
+        $('#loadTokenModal').modal('hide');
+        $.toast({
+            text: 'Se ha cargado token de asistencia',
+            hideAfter: 3000,
+            allowToastClose: true,
+            showHideTransition: 'fade',
+            position: 'bottom-center',
+            icon: 'success'
+        });
+        $('#TBoxLoadCode').val('')
+    };
+
+    function LoadTokenFailure(xhr) {
+        $('#tokenModal').modal('hide');
+        $.toast({
+            text: `Error: token expirado`,
             hideAfter: 3000,
             allowToastClose: true,
             showHideTransition: 'fade',
@@ -365,5 +501,5 @@ else if (role == 3)
         });
     };
 
-    </script>
+</script>
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Nogupe.Web.ViewModels.Token
+﻿namespace Nogupe.Web.ViewModels.Token
 {
     public class TokenViewModel
     {
