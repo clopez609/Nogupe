@@ -112,7 +112,7 @@ namespace Nogupe.Web.Controllers
             model.ToEntityModel(course);
             _courseService.Create(course);
 
-            return View(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

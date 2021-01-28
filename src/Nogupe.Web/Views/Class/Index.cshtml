@@ -16,6 +16,7 @@
             <div class="mb-1">
                 <button type="button" class="btn btn-primary" onclick="openModalRating()">Cargar Notas</button>
                 <button type="button" class="btn btn-primary" onclick="openModalToken()">Tomar Asistencia</button>
+                <button type="button" class="btn btn-primary" onclick="openModalAproved()">Reporte Notas</button>
             </div>
             <div class="card">
                 <div class="card-header" style="background-color:cadetblue">
@@ -276,6 +277,110 @@ else if (role == 3)
     </div>
 </div>
 
+<!-- Modal Aprobados/Desaprobados -->
+<div class="modal fade" id="reportApproved" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reporte de Notas</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                @{
+                    if (role == 2)
+                    {
+                        var user = Model.Ratings.Where(x => x.UserId == currentUser.Value).SingleOrDefault();
+                        var approved = Model.Ratings.Where(x => x.Status.ToString() == "Regular" || x.Status.ToString() == "Promotion");
+                        var disapproved = Model.Ratings.Where(x => x.Status.ToString() == "Postponed");
+
+                        //string rating;
+
+                        @*if (user == null)
+                        {
+                            <h5 class="text-center">¡No hay notas cargadas!</h5>
+                        }*@
+
+                        //var prom = (user.OnePartial + user.TwoPartial + user.FinalNote) / 3;
+
+                        //if (user != null && prom > 7)
+                        //{
+                        //    rating = "Promoción";
+                        //}
+                        //else if (user != null && prom > 4 && prom < 7)
+                        //{
+                        //    rating = "Regular";
+                        //}
+                        //else
+                        //{
+                        //    rating = "Aplazado";
+                        //}
+
+                        if (approved.Count() > 0)
+                        {
+                            <div>
+                                <h5>Aprobados</h5>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nota 1°</th>
+                                            <th scope="col">Nota 2°</th>
+                                            <th scope="col">Nota Final</th>
+                                            <th scope="col">Situación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in approved)
+                                        {
+                                            <tr>
+                                                <td> @item.OnePartial </td>
+                                                <td> @item.TwoPartial </td>
+                                                <td> @item.FinalNote </td>
+                                                <td> @item.Status </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                        if (disapproved.Count() > 0)
+                        {
+                            <div>
+                                <h5>Desaprobados</h5>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nota 1°</th>
+                                            <th scope="col">Nota 2°</th>
+                                            <th scope="col">Nota Final</th>
+                                            <th scope="col">Situación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in disapproved)
+                                        {
+                                            <tr>
+                                                <td> @item.OnePartial </td>
+                                                <td> @item.TwoPartial </td>
+                                                <td> @item.FinalNote </td>
+                                                <td> @item.Status </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Calificaciones Alumno -->
 <div class="modal fade" id="myRating" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -294,7 +399,7 @@ else if (role == 3)
 
                         if (user == null)
                         {
-                            <h5 class="text-center">¡No hay notas cargados!</h5>
+                            <h5 class="text-center">¡No hay notas cargadas!</h5>
                         }
 
                         if (user != null && user.FinalNote > 7)
@@ -341,7 +446,11 @@ else if (role == 3)
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
+    <script>
+
+    function openModalAproved() {
+        $('#reportApproved').modal('show');
+    };
 
     function openModalRating() {
         $('#ratingStudents').modal('show');
@@ -501,5 +610,5 @@ else if (role == 3)
         });
     };
 
-</script>
+    </script>
 }

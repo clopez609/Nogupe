@@ -14,6 +14,12 @@
                 </a>
             </div>
             <div class="box-body card-body">
+
+                @if (Model.Entities.Count() <= 0)
+                {
+                    <h5 class="text-center">¡No hay cursos cargados!</h5>
+                }
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -38,34 +44,34 @@
                     <tbody>
                         @foreach (var item in Model.Entities)
                         {
-                        <tr id="row_@item.Id">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CommissionNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MatterName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CareerName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.WeekdayName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UserName)
-                            </td>
+                            <tr id="row_@item.Id">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CommissionNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MatterName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CareerName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WeekdayName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
 
-
-                            <td class="text-center">
-                                <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         }
+
                     </tbody>
                 </table>
             </div>
@@ -130,7 +136,7 @@
                 data: { id: id },
                 success: function (res) {
                     $('#deleteModal').modal('hide');
-                    $("#card_" + id).remove();
+                    $("#row_" + id).remove();
                 },
                 error: function (xhr, status) {
                     alert('Disculpe, existió un problema');

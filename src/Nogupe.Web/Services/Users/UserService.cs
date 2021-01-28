@@ -72,12 +72,12 @@ namespace Nogupe.Web.Services.Users
                 }
                 else
                 {
-                    errorCode = "INVALID_PASSWORD";
+                    errorCode = "Contraseña Invalida";
                 }
             }
             else
             {
-                errorCode = "USER_NOT_FOUND";
+                errorCode = "Usuario no encontrado";
             }
             return new UserValidationResult(result, userRecord, message: messageData, errorCode: errorCode);
         }
@@ -91,7 +91,7 @@ namespace Nogupe.Web.Services.Users
 
             if (userRecord != null)
             {
-                errorCode = "USER_REGISTER";
+                errorCode = "Usuario Registrado";
             }
             else
             {
@@ -110,7 +110,7 @@ namespace Nogupe.Web.Services.Users
 
             if (!string.IsNullOrEmpty(userRecord.FirstName))
             {
-                errorCode = "THERE_IS_ALREADY_A_REGISTERED_USER";
+                errorCode = "Ya hay un usuario registrado";
             }
             else
             {

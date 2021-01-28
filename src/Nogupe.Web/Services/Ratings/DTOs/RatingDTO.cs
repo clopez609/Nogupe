@@ -14,5 +14,6 @@ namespace Nogupe.Web.Services.Ratings.DTOs
         public int? OnePartial { get; set; }
         public int? TwoPartial { get; set; }
         public int? FinalNote { get; set; }
+        public string Status { get; set; }
     }
 }

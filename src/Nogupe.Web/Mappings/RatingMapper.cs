@@ -20,6 +20,7 @@ namespace Nogupe.Web.Mappings
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<RatingViewModel, Rating>();
+                    //.ForMember(opt => opt.UserId, dst => dst.Ignore());
 
                 cfg.CreateMap<RatingListDTO, RatingViewModel>();
 

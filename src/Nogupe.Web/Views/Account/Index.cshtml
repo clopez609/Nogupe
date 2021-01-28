@@ -59,9 +59,9 @@
                                     @Html.DisplayFor(modelItem => item.Rolename)
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
+                                    @*<a class="btn btn-sm btn-primary pull-right" asp-action="Edit" asp-route-id="@item.Id">
                                         <i class="fas fa-edit"></i>
-                                    </a>
+                                    </a>*@
                                     <button id="btnDeleteModal" class="btn btn-sm btn-danger pull-right" onclick="ConfirmDelete(@item.Id)" data-toggle="modal" data-target="deleteModal">
                                         <i class="fas fa-trash"></i>
                                     </button>

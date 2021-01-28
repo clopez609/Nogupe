@@ -36,6 +36,7 @@ namespace Nogupe.Web.Controllers
         public IActionResult Index(int id)
         {
             var course = _courseService.GetByIdDTO(id).ToViewModel();
+
             return View(course);
         }
 
@@ -124,5 +125,17 @@ namespace Nogupe.Web.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet]
+        public IActionResult RatingList(int courseId)
+        {
+            var ratings = _ratingService.GetAll().Where(x => x.CourseId == courseId);
+
+            var approved = ratings.Where(x => x.Status.ToString() == "Regular" || x.Status.ToString() == "Promotion");
+            var disapproved = ratings.Where(x => x.Status.ToString() == "Postponed");
+
+            return Json(new { approved = approved, disapproved = disapproved });
+        }
+
     }
 }

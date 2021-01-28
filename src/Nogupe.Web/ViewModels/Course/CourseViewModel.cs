@@ -9,27 +9,27 @@ namespace Nogupe.Web.ViewModels.Course
     {
         public int? Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         public int CommissionNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         public int CareerId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         public int MatterId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         public int WeekdayId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         [DisplayFormat(DataFormatString = @"{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         [DisplayFormat(DataFormatString = @"{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Requerido")]
         public int UserId { get; set; }
 
         public IEnumerable<SelectListItem> Careers { get; set; }

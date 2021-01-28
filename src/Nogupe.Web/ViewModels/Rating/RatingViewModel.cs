@@ -18,6 +18,7 @@ namespace Nogupe.Web.ViewModels.Rating
 
         [Required(ErrorMessage = "Requerido")]
         public int? FinalNote { get; set; }
+        public string Status { get; set; }
 
     }
 }

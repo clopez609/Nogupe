@@ -39,7 +39,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.EndDate, "Fecha de Inicio")
+        @Html.LabelFor(model => model.EndDate, "Fecha de Finalización")
         @Html.TextBoxFor(model => model.EndDate, String.Format("{0:dd/MM/yyyy}", Model.EndDate), new { @type = "date", @class = "form-control", tabindex = "6" })
         @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
     </div>
