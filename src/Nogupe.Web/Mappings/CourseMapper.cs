@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Courses;
+using Nogupe.Web.Services.Assistances.DTOs;
 using Nogupe.Web.Services.Courses.DTOs;
 using Nogupe.Web.Services.Ratings.DTOs;
 using Nogupe.Web.Services.Walls.DTOs;
 using Nogupe.Web.ViewModels;
+using Nogupe.Web.ViewModels.Assistance;
 using Nogupe.Web.ViewModels.Comment;
 using Nogupe.Web.ViewModels.Course;
 using Nogupe.Web.ViewModels.File;
@@ -36,6 +38,8 @@ namespace Nogupe.Web.Mappings
                 cfg.CreateMap<InscriptionDTO, InscriptionViewModel>();
 
                 cfg.CreateMap<RatingDTO, RatingViewModel>();
+
+                cfg.CreateMap<AssistanceDTO, AssistanceViewModel>();
 
                 cfg.CreateMap(typeof(PagedListResult<CourseListDTO>), typeof(PagedListResultViewModel<CourseListViewModel>));
             });

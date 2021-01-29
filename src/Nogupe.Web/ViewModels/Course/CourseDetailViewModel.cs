@@ -1,4 +1,5 @@
-﻿using Nogupe.Web.ViewModels.Comment;
+﻿using Nogupe.Web.ViewModels.Assistance;
+using Nogupe.Web.ViewModels.Comment;
 using Nogupe.Web.ViewModels.File;
 using Nogupe.Web.ViewModels.Rating;
 using System;
@@ -15,6 +16,7 @@ namespace Nogupe.Web.ViewModels.Course
             Ratings = new List<RatingViewModel>();
             Comments = new List<CommentViewModel>();
             Files = new List<FileViewModel>();
+            Assistances = new List<AssistanceViewModel>();
         }
 
         public int? Id { get; set; }
@@ -26,6 +28,6 @@ namespace Nogupe.Web.ViewModels.Course
 
         //public ICollection<InscriptionDTO> Inscriptions { get; set; }
         //public ICollection<TokenDTO> Tokens { get; set; }
-        //public ICollection<AssistanceDTO> Assistances { get; set; }
+        public ICollection<AssistanceViewModel> Assistances { get; set; }
     }
 }

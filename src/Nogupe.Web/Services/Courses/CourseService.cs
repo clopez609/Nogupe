@@ -8,6 +8,7 @@ using Nogupe.Web.Entities.Repository;
 using Nogupe.Web.Helpers.PredicateExtentions;
 using Nogupe.Web.Helpers.QueryableExtentions;
 using Nogupe.Web.Models.QueryFilters;
+using Nogupe.Web.Services.Assistances.DTOs;
 using Nogupe.Web.Services.Courses.DTOs;
 using Nogupe.Web.Services.Files.DTOs;
 using Nogupe.Web.Services.Ratings.DTOs;
@@ -38,10 +39,13 @@ namespace Nogupe.Web.Services.Courses
                 cfg.CreateMap<File, FileDTO>();
 
                 cfg.CreateMap<Inscription, InscriptionDTO>()
-                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+
+                cfg.CreateMap<Assistance, AssistanceDTO>()
+                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
 
                 cfg.CreateMap<Rating, RatingDTO>()
-                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+                    .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
             });
 
             _mapper = config.CreateMapper();

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nogupe.Web.Services.Assistances.DTOs
+namespace Nogupe.Web.ViewModels.Assistance
 {
-    public class AssistanceDTO
+    public class AssistanceViewModel
     {
         public int? Id { get; set; }
         public bool Status { get; set; }

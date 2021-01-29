@@ -17,6 +17,7 @@
                 <button type="button" class="btn btn-primary" onclick="openModalRating()">Cargar Notas</button>
                 <button type="button" class="btn btn-primary" onclick="openModalToken()">Tomar Asistencia</button>
                 <button type="button" class="btn btn-primary" onclick="openModalAproved()">Reporte Notas</button>
+                <button type="button" class="btn btn-primary" onclick="openModalAssistance()">Reporte Asistencias</button>
             </div>
             <div class="card">
                 <div class="card-header" style="background-color:cadetblue">
@@ -295,10 +296,10 @@ else if (role == 3)
 
                         //string rating;
 
-                        @*if (user == null)
+                        if(Model.Ratings.Count() <= 0)
                         {
                             <h5 class="text-center">¡No hay notas cargadas!</h5>
-                        }*@
+                        }
 
                         //var prom = (user.OnePartial + user.TwoPartial + user.FinalNote) / 3;
 
@@ -381,6 +382,68 @@ else if (role == 3)
     </div>
 </div>
 
+<!-- Modal Asistencias -->
+<div class="modal fade" id="reportAssistance" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reporte de Asistencias</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                @{
+                    if (role == 2)
+                    {
+                        var user = Model.Ratings.Where(x => x.UserId == currentUser.Value).SingleOrDefault();
+                        var today = DateTime.Now.ToString("yyyy MM dd");
+
+                        if (Model.Assistances.Count() <= 0)
+                        {
+                            <h5 class="text-center">¡No hay asistencias registradas!</h5>
+                        }
+
+                        <div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Alumno</th>
+                                        <th scope="col">Presente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Assistances)
+                                    {
+                                        if(@item.Today.ToString("yyyy MM dd") == today)
+                                        {
+                                            <tr>
+                                                <td> @item.UserName </td>
+
+                                                @if (item.Status == true)
+                                                {
+                                                    <td>Si</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>No</td>
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                    }
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Calificaciones Alumno -->
 <div class="modal fade" id="myRating" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -397,42 +460,46 @@ else if (role == 3)
 
                         string rating;
 
-                        if (user == null)
+                        if (user == null || user.Status.ToString() == "None")
                         {
                             <h5 class="text-center">¡No hay notas cargadas!</h5>
                         }
-
-                        if (user != null && user.FinalNote > 7)
-                        {
-                            rating = "Promoción";
-                        }
-                        else if (user != null && user.FinalNote > 4 && user.FinalNote < 7)
-                        {
-                            rating = "Regular";
-                        }
                         else
                         {
-                            rating = "Aplazado";
+                            if (user != null && user.FinalNote > 7)
+                            {
+                                rating = "Promoción";
+                            }
+                            else if (user != null && user.FinalNote > 4 && user.FinalNote < 7)
+                            {
+                                rating = "Regular";
+                            }
+                            else
+                            {
+                                rating = "Aplazado";
+                            }
+
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nota 1°</th>
+                                        <th scope="col">Nota 2°</th>
+                                        <th scope="col">Nota Final</th>
+                                        <th scope="col">Situacion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> @user.OnePartial </td>
+                                        <td> @user.TwoPartial </td>
+                                        <td> @user.FinalNote </td>
+                                        <td> @rating </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         }
 
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nota 1°</th>
-                                    <th scope="col">Nota 2°</th>
-                                    <th scope="col">Nota Final</th>
-                                    <th scope="col">Situacion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td> @user.OnePartial </td>
-                                    <td> @user.TwoPartial </td>
-                                    <td> @user.FinalNote </td>
-                                    <td> @rating </td>
-                                </tr>
-                            </tbody>
-                        </table>
+
                     }
                 }
             </div>
@@ -450,6 +517,10 @@ else if (role == 3)
 
     function openModalAproved() {
         $('#reportApproved').modal('show');
+    };
+
+    function openModalAssistance() {
+        $('#reportAssistance').modal('show');
     };
 
     function openModalRating() {

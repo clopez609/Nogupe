@@ -3,7 +3,7 @@
 <div class="row">
     @Html.HiddenFor(model => model.Id)
     @Html.HiddenFor(model => model.CourseId)
-    <div class="col-md">
+    <div class="col-md-3">
         <div class="form-group">
             @Html.LabelFor(model => model.Username, "Nombre")
             @Html.TextBoxFor(model => model.Username, new { @class = "form-control", disabled = "disabled" })

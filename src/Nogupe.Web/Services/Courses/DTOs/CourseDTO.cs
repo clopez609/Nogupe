@@ -19,7 +19,7 @@ namespace Nogupe.Web.Services.Courses.DTOs
         public ICollection<InscriptionDTO> Inscriptions {get; set;}
         //public ICollection<TokenDTO> Tokens { get; set; }
         public ICollection<RatingDTO> Ratings { get; set; }
-        //public ICollection<AssistanceDTO> Assistances { get; set; }
+        public ICollection<AssistanceDTO> Assistances { get; set; }
 
     }
 }
