@@ -143,7 +143,7 @@ namespace Nogupe.Web.Controllers
             model.ToEntityModel(course);
             _courseService.Update(course);
 
-            return View(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         [HttpDelete]
