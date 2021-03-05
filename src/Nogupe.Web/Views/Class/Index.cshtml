@@ -51,13 +51,14 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <input type="hidden" name="CourseId" value="@Model.Id" />
-                                        <textarea class="form-control" id="Commentary" name="Commentary" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
+                                        <textarea class="form-control" id="Commentary" name="Commentary" maxlength="255" type="text" placeholder="Escribir un comentario..." style="overflow:auto;resize:none"></textarea>
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-secondary">
                                                 <i class="fas fa-paper-plane"></i>
                                             </button>
                                         </div>
                                     </div>
+                                    <div id="count" class="text-danger"></div>
                                 </div>
                             </form>
                         </div>
@@ -514,6 +515,10 @@ else if (role == 3)
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+
+    $("#Commentary").keyup(function () {
+        $("#count").text("Caracteres restantes: " + (255 - $(this).val().length));
+    });
 
     function openModalAproved() {
         $('#reportApproved').modal('show');

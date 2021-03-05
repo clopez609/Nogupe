@@ -2,6 +2,7 @@
 using Nogupe.Web.Services.Assistances;
 using Nogupe.Web.Services.Careers;
 using Nogupe.Web.Services.Courses;
+using Nogupe.Web.Services.Email;
 using Nogupe.Web.Services.Files;
 using Nogupe.Web.Services.Matters;
 using Nogupe.Web.Services.Ratings;
@@ -18,6 +19,7 @@ namespace Nogupe.Web.Middleware
     {
         public static IServiceCollection AddDependency(this IServiceCollection services)
         {
+            services.AddTransient<IEmailSenderService, EmailSenderService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleTypeService, RoleTypeService>();
             services.AddTransient<ICareerService, CareerService>();

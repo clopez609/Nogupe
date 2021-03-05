@@ -7,6 +7,7 @@ using Nogupe.Web.Helpers.PredicateExtentions;
 using Nogupe.Web.Helpers.QueryableExtentions;
 using Nogupe.Web.Models;
 using Nogupe.Web.Models.QueryFilters;
+using Nogupe.Web.Services.Email;
 using Nogupe.Web.Services.Users.DTOs;
 using System;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Nogupe.Web.Services.Users
     public class UserService : Repository<User>, IUserService
     {
         private readonly DataContext _context;
+        
         public UserService(DataContext context) : base(context)
         {
             _context = context;
@@ -133,6 +135,10 @@ namespace Nogupe.Web.Services.Users
             userRecord.FirstName = user.FirstName;
             userRecord.LastName = user.LastName;
             userRecord.Email = user.Email;
+            userRecord.Phone = user.Phone;
+            userRecord.CellPhone = user.CellPhone;
+            userRecord.Address = user.Address;
+            userRecord.AdressNumber = user.AdressNumber;
 
             base.Update(userRecord);
         }
@@ -156,20 +162,20 @@ namespace Nogupe.Web.Services.Users
             return true;
         }
 
-        public bool GenerateTokenRecovery(string email)
+        public string GenerateTokenRecovery(string email)
         {
             var userRecord = _context.Set<User>().FirstOrDefault(x => x.Email == email);
 
-            if (userRecord == null) return false;
+            if (userRecord == null) throw new ArgumentException("user");
 
             string Token = GetSha256(Guid.NewGuid().ToString());
 
             userRecord.TokenRecovery = Token;
             base.Update(userRecord);
 
-            SendEmail(email, Token);
+            //SendEmail(email, Token);
 
-            return true;
+            return Token;
         }
 
         private static void SendEmail(string email, string token)
