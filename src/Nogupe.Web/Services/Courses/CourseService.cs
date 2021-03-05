@@ -136,6 +136,8 @@ namespace Nogupe.Web.Services.Courses
 
             Expression<Func<Course, bool>> result = execution => true;
 
+            if (filter.UserId.HasValue) result = result.AndAlso(x => x.UserId == filter.UserId);
+
             if (filter.CareerId.HasValue) result = result.AndAlso(x => x.CareerId == filter.CareerId);
 
             if (filter.MatterId.HasValue) result = result.AndAlso(x => x.MatterId == filter.MatterId);

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Nogupe.Web.Common;
 using Nogupe.Web.Entities.Auth;
 using Nogupe.Web.Mappings;
+using Nogupe.Web.Models;
+using Nogupe.Web.Services.Email;
 using Nogupe.Web.Services.RoleTypes;
 using Nogupe.Web.Services.Users;
 using Nogupe.Web.ViewModels;
@@ -15,11 +17,12 @@ namespace Nogupe.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRoleTypeService _roleTypeService;
-
-        public AccountController(IUserService userService, IRoleTypeService roleTypeService)
+        private readonly IEmailSenderService _emailSenderService;
+        public AccountController(IUserService userService, IRoleTypeService roleTypeService, IEmailSenderService emailSenderService)
         {
             _userService = userService;
             _roleTypeService = roleTypeService;
+            _emailSenderService = emailSenderService;
         }
 
         [HttpGet]
@@ -72,7 +75,7 @@ namespace Nogupe.Web.Controllers
                     var user = result.User;
 
                     HttpContext.Session.SetInt32("_Id", user.Id);
-                    HttpContext.Session.SetString("_User", user.UserName);
+                    HttpContext.Session.SetString("_User", $"{user.FirstName} {user.LastName}"); 
                     HttpContext.Session.SetInt32("_Role", user.RoleId);
 
                     return Redirect("/Home/Index");
@@ -162,7 +165,7 @@ namespace Nogupe.Web.Controllers
                     var userResult = result.User;
 
                     HttpContext.Session.SetInt32("_Id", userResult.Id);
-                    HttpContext.Session.SetString("_User", userResult.UserName);
+                    HttpContext.Session.SetString("_User", $"{userResult.FirstName} {userResult.LastName}");
                     HttpContext.Session.SetInt32("_Role", userResult.RoleId);
 
                     return Redirect("/Home/Index");
@@ -230,9 +233,18 @@ namespace Nogupe.Web.Controllers
                 return View(model);
             }
 
-            if (!_userService.GenerateTokenRecovery(model.Email))
+            var token = _userService.GenerateTokenRecovery(model.Email);
+
+            if (!string.IsNullOrEmpty(token))
             {
-                return BadRequest();
+                var email = new MailRequest()
+                {
+                    Email = model.Email,
+                    Subject = "Recuperar Contraseña",
+                    Body = "<p>Correo para recuperación de contraseña</p><br>" + "<a href='" + "http://christianlopez-001-site1.gtempurl.com/Account/Recovery/?token="+token + "'>Click para recuperar</a>"
+                };
+
+                _emailSenderService.SendEmailAsync(email);
             }
 
             return View();

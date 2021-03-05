@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nogupe.Web.Data;
 using Nogupe.Web.Middleware;
+using Nogupe.Web.Models;
+using Nogupe.Web.Services.Email;
 using System;
 
 namespace Nogupe.Web
@@ -31,6 +33,8 @@ namespace Nogupe.Web
             services.AddDbContext<DataContext>(options =>
                options.UseMySql(sqlConnectionString)
             );
+
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
 
             IoC.AddDependency(services);
 

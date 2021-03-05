@@ -21,7 +21,7 @@ namespace Nogupe.Web.Services.Users
 
         bool ValidateToken(string token);
 
-        bool GenerateTokenRecovery(string email);
+        string GenerateTokenRecovery(string email);
 
         void ChangePassword(string token, string password);
     }

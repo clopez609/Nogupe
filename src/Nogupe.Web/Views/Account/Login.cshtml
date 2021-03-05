@@ -12,7 +12,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.UserName, "Usuario")
-        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", tabindex = "1" })
+        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", tabindex = "1", placeholder = "DNI" })
         @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
     </div>
 
