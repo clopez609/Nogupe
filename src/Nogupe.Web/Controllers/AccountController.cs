@@ -241,7 +241,7 @@ namespace Nogupe.Web.Controllers
                 {
                     Email = model.Email,
                     Subject = "Recuperar Contraseña",
-                    Body = "<p>Correo para recuperación de contraseña</p><br>" + "<a href='" + "http://christianlopez-001-site1.gtempurl.com/Account/Recovery/?token="+token + "'>Click para recuperar</a>"
+                    Body = "<p>Correo para recuperación de contraseña</p><br>" + "<a href='" + "https://nogupeweb.azurewebsites.net/Account/Recovery/?token=" + token + "'>Click para recuperar</a>"
                 };
 
                 _emailSenderService.SendEmailAsync(email);
